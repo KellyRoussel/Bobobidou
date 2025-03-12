@@ -1,3 +1,4 @@
+import 'package:bobobidou/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/meals_provider.dart';
@@ -10,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +20,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MealsProvider()),
         ChangeNotifierProvider(create: (_) => PainProvider()),
         ChangeNotifierProvider(create: (_) => AnalysisProvider()),
+        ChangeNotifierProvider(create: (_) => AppTheme()),
       ],
-      child: MaterialApp(
-        title: 'Tracking Repas et Douleurs',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: Consumer<AppTheme>(
+        builder: (context, appTheme, _) => MaterialApp(
+          title: 'Food & Pain Tracker',
+          theme: appTheme.currentTheme,
+          home: const HomePage(),
+          debugShowCheckedModeBanner: false,
         ),
-        home: const HomePage(),
       ),
     );
   }

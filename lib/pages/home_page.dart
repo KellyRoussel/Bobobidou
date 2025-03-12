@@ -7,6 +7,7 @@ import '../providers/meals_provider.dart';
 import '../providers/pain_provider.dart';
 import 'analysis_page.dart';
 import 'package:intl/intl.dart';
+import 'theme_settings_page.dart'; // Add this import
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -44,11 +45,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6750A4),
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Colors.black,
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).primaryColor,
+              onPrimary: Theme.of(context).colorScheme.onPrimary,
+              surface: Theme.of(context).colorScheme.surface,
+              onSurface: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           child: child!,
@@ -63,11 +64,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF6750A4),
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Colors.black,
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).primaryColor,
+              onPrimary: Theme.of(context).colorScheme.onPrimary,
+              surface: Theme.of(context).colorScheme.surface,
+              onSurface: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           child: child!,
@@ -89,17 +90,23 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     final painProvider = Provider.of<PainProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFF6750A4),
-        title: const Text(
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
           "Food & Pain Tracker",
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).appBarTheme.foregroundColor,
+          ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.analytics_outlined, color: Colors.white),
+            icon: Icon(
+              Icons.analytics_outlined,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
             tooltip: 'View Analysis',
             onPressed: () {
               Navigator.push(
@@ -107,14 +114,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 MaterialPageRoute(builder: (_) => const AnalysisPage()),
               );
             },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.color_lens,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
+            tooltip: 'Theme Settings',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ThemeSettingsPage()),
+              );
+            },
           )
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
+          indicatorColor: Theme.of(context).colorScheme.onPrimary,
           indicatorWeight: 3,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
+          labelColor: Theme.of(context).colorScheme.onPrimary,
+          unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
           tabs: const [
             Tab(
               icon: Icon(Icons.restaurant),
@@ -167,7 +187,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.calendar_today, color: Color(0xFF6750A4)),
+                              Icon(
+                                Icons.calendar_today,
+                                color: Theme.of(context).primaryColor,
+                              ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
@@ -228,8 +251,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6750A4),
-                            foregroundColor: Colors.white,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -279,7 +302,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.calendar_today, color: Color(0xFF6750A4)),
+                              Icon(
+                                Icons.calendar_today,
+                                color: Theme.of(context).primaryColor,
+                              ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
@@ -335,8 +361,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6750A4),
-                            foregroundColor: Colors.white,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -359,7 +385,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF6750A4),
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         elevation: 2,
         onPressed: () {
           Navigator.push(
@@ -367,7 +394,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             MaterialPageRoute(builder: (_) => const AnalysisPage()),
           );
         },
-        child: const Icon(Icons.insights, color: Colors.white),
+        child: const Icon(Icons.insights),
       ),
     );
   }
@@ -377,10 +404,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF6750A4),
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -389,7 +416,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget _buildCard({required Widget child}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -413,7 +440,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         Container(
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -424,7 +451,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ],
           ),
           child: mealsProvider.meals.isEmpty
-              ? const Center(
+              ? Center(
             child: Text(
               "No meals logged yet",
               style: TextStyle(
@@ -443,9 +470,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               final meal = mealsProvider.meals[reversedIndex];
               return ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Color(0xFFEDE7F6),
-                  child: Icon(Icons.restaurant, color: Color(0xFF6750A4)),
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                  child: Icon(Icons.restaurant, color: Theme.of(context).primaryColor),
                 ),
                 title: Text(
                   meal.ingredients.join(", "),
@@ -471,7 +498,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         Container(
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -482,7 +509,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ],
           ),
           child: painProvider.painEvents.isEmpty
-              ? const Center(
+              ? Center(
             child: Text(
               "No pain episodes logged yet",
               style: TextStyle(
@@ -501,9 +528,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               final pain = painProvider.painEvents[reversedIndex];
               return ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Color(0xFFFCE4EC),
-                  child: Icon(Icons.healing, color: Colors.redAccent),
+                leading: CircleAvatar(
+                  backgroundColor: Colors.redAccent.withOpacity(0.2),
+                  child: const Icon(Icons.healing, color: Colors.redAccent),
                 ),
                 title: const Text(
                   "Pain Episode",

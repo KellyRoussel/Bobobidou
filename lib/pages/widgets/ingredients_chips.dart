@@ -52,12 +52,18 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Get theme colors
+    final primaryColor = Theme.of(context).primaryColor;
+    final primaryLightColor = Theme.of(context).colorScheme.primary.withOpacity(0.1);
+    final borderColor = Theme.of(context).dividerColor;
+    final hintColor = Theme.of(context).hintColor;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[400]!),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
@@ -67,15 +73,16 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                 padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
                 child: Row(
                   children: [
-                    const Icon(Icons.food_bank, color: Color(0xFF6750A4)),
+                    Icon(Icons.food_bank, color: primaryColor),
                     const SizedBox(width: 12),
                     Expanded(
                       child: TextField(
                         controller: _controller,
                         focusNode: _focusNode,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Add an ingredient...',
                           border: InputBorder.none,
+                          hintStyle: TextStyle(color: hintColor),
                         ),
                         onSubmitted: (value) {
                           _addIngredient(value);
@@ -84,7 +91,7 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.add_circle, color: Color(0xFF6750A4)),
+                      icon: Icon(Icons.add_circle, color: primaryColor),
                       onPressed: () {
                         _addIngredient(_controller.text);
                         _focusNode.requestFocus();
@@ -101,9 +108,14 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                     runSpacing: 8,
                     children: _ingredients.map((ingredient) {
                       return Chip(
-                        label: Text(ingredient),
-                        backgroundColor: const Color(0xFFEDE7F6),
-                        deleteIconColor: const Color(0xFF6750A4),
+                        label: Text(
+                          ingredient,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        backgroundColor: primaryLightColor,
+                        deleteIconColor: primaryColor,
                         onDeleted: () => _removeIngredient(ingredient),
                       );
                     }).toList(),
@@ -117,7 +129,7 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
           padding: const EdgeInsets.only(left: 12),
           child: Text(
             'Add each ingredient separately',
-            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            style: TextStyle(color: hintColor, fontSize: 12),
           ),
         ),
       ],

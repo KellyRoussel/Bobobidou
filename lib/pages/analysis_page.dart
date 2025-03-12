@@ -38,18 +38,22 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFF6750A4),
-        title: const Text(
+        backgroundColor: primaryColor,
+        title: Text(
           "Ingredient Analysis",
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.w600, color: colorScheme.onPrimary),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
+            icon: Icon(Icons.refresh, color: colorScheme.onPrimary),
             tooltip: 'Refresh Data',
             onPressed: () async {
               setState(() {
@@ -66,9 +70,9 @@ class _AnalysisPageState extends State<AnalysisPage> {
         ],
       ),
       body: _isLoading
-          ? const Center(
+          ? Center(
         child: CircularProgressIndicator(
-          color: Color(0xFF6750A4),
+          color: primaryColor,
         ),
       )
           : Consumer<AnalysisProvider>(
@@ -76,7 +80,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
           final involvement = analysisProvider.ingredientInvolvement;
 
           if (involvement.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
 
           List<MapEntry<String, int>> sortedEntries = involvement.entries.toList()
@@ -92,8 +96,8 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
           return Column(
             children: [
-              _buildHeaderStats(sortedEntries),
-              _buildSearchBar(),
+              _buildHeaderStats(context, sortedEntries),
+              _buildSearchBar(context),
               Expanded(
                 child: sortedEntries.isEmpty && _filterQuery.isNotEmpty
                     ? Center(
@@ -105,7 +109,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                     ),
                   ),
                 )
-                    : _buildIngredientsList(sortedEntries),
+                    : _buildIngredientsList(context, sortedEntries),
               ),
             ],
           );
@@ -114,7 +118,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -152,8 +159,8 @@ class _AnalysisPageState extends State<AnalysisPage> {
               icon: const Icon(Icons.add),
               label: const Text("LOG DATA"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6750A4),
-                foregroundColor: Colors.white,
+                backgroundColor: primaryColor,
+                foregroundColor: theme.colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -166,7 +173,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
     );
   }
 
-  Widget _buildHeaderStats(List<MapEntry<String, int>> sortedEntries) {
+  Widget _buildHeaderStats(BuildContext context, List<MapEntry<String, int>> sortedEntries) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     // Get top 5 ingredients for chart
     final topIngredients = sortedEntries.take(5).toList();
 
@@ -174,7 +184,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -187,12 +197,12 @@ class _AnalysisPageState extends State<AnalysisPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Pain Correlation Summary",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF6750A4),
+              color: primaryColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -269,7 +279,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                     barRods: [
                       BarChartRodData(
                         toY: topIngredients[index].value.toDouble(),
-                        color: Color(0xFF6750A4).withOpacity(0.7 - (index * 0.1)),
+                        color: primaryColor.withOpacity(0.7 - (index * 0.1)),
                         width: 20,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(4),
@@ -296,7 +306,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TextField(
@@ -308,7 +321,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
         },
         decoration: InputDecoration(
           hintText: "Search ingredients...",
-          prefixIcon: const Icon(Icons.search, color: Color(0xFF6750A4)),
+          prefixIcon: Icon(Icons.search, color: primaryColor),
           suffixIcon: _filterQuery.isNotEmpty
               ? IconButton(
             icon: const Icon(Icons.clear),
@@ -321,7 +334,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
           )
               : null,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: theme.colorScheme.surface,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,
@@ -332,19 +345,22 @@ class _AnalysisPageState extends State<AnalysisPage> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF6750A4), width: 2),
+            borderSide: BorderSide(color: primaryColor, width: 2),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildIngredientsList(List<MapEntry<String, int>> sortedEntries) {
+  Widget _buildIngredientsList(BuildContext context, List<MapEntry<String, int>> sortedEntries) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -355,7 +371,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
           ],
         ),
         child: RefreshIndicator(
-          color: const Color(0xFF6750A4),
+          color: primaryColor,
           onRefresh: () async {
             final analysisProvider =
             Provider.of<AnalysisProvider>(context, listen: false);
