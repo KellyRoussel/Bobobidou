@@ -1,3 +1,4 @@
+import 'package:bobobidou/pages/widgets/ingredients_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/meal.dart';
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   DateTime? _selectedMealDateTime;
   DateTime? _selectedPainDateTime;
   late TabController _tabController;
+  List<String> _selectedIngredients = [];
 
   @override
   void initState() {
@@ -140,21 +142,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextField(
-                        controller: _ingredientsController,
-                        decoration: InputDecoration(
-                          labelText: "Ingredients (separated by commas)",
-                          labelStyle: TextStyle(color: Colors.grey[600]),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: Color(0xFF6750A4), width: 2),
-                          ),
-                          prefixIcon: const Icon(Icons.food_bank, color: Color(0xFF6750A4)),
-                        ),
-                        maxLines: 3,
+                      IngredientInputWidget(
+                        onIngredientsChanged: (ingredients) {
+                          setState(() {
+                            _selectedIngredients = ingredients;
+                          });
+                        },
                       ),
                       const SizedBox(height: 16),
                       InkWell(
@@ -198,23 +191,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_selectedMealDateTime != null &&
-                                _ingredientsController.text.trim().isNotEmpty) {
-                              final ingredients = _ingredientsController.text
-                                  .split(',')
-                                  .map((s) => s.trim())
-                                  .where((s) => s.isNotEmpty)
-                                  .toList();
-
+                            if (_selectedMealDateTime != null && _selectedIngredients.isNotEmpty) {
                               Meal meal = Meal(
-                                  dateTime: _selectedMealDateTime!,
-                                  ingredients: ingredients);
+                                dateTime: _selectedMealDateTime!,
+                                ingredients: _selectedIngredients,
+                              );
 
                               await mealsProvider.addMeal(meal);
-                              _ingredientsController.clear();
 
                               setState(() {
                                 _selectedMealDateTime = null;
+                                _selectedIngredients = [];
                               });
 
                               ScaffoldMessenger.of(context).showSnackBar(
