@@ -69,6 +69,8 @@ class _AnalysisPageState extends State<AnalysisPage> {
           ),
         ],
       ),
+      // Add resizeToAvoidBottomInset to prevent the keyboard from causing overflow
+      resizeToAvoidBottomInset: true,
       body: _isLoading
           ? Center(
         child: CircularProgressIndicator(
@@ -94,24 +96,34 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 .toList();
           }
 
-          return Column(
-            children: [
-              _buildHeaderStats(context, sortedEntries),
-              _buildSearchBar(context),
-              Expanded(
-                child: sortedEntries.isEmpty && _filterQuery.isNotEmpty
-                    ? Center(
-                  child: Text(
-                    'No ingredients match "$_filterQuery"',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+          // Wrap everything in a SingleChildScrollView
+          return SingleChildScrollView(
+            // Set physics to allow scrolling when keyboard appears
+            physics: const ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                _buildHeaderStats(context, sortedEntries),
+                _buildSearchBar(context),
+                // Use a fixed height container for the list to prevent infinite height issues
+                Container(
+                  height: MediaQuery.of(context).size.height - 300, // Adjust this value as needed
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 16,
                   ),
-                )
-                    : _buildIngredientsList(context, sortedEntries),
-              ),
-            ],
+                  child: sortedEntries.isEmpty && _filterQuery.isNotEmpty
+                      ? Center(
+                    child: Text(
+                      'No ingredients match "$_filterQuery"',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
+                      : _buildIngredientsList(context, sortedEntries),
+                ),
+              ],
+            ),
           );
         },
       ),
