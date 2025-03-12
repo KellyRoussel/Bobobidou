@@ -102,19 +102,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.analytics_outlined,
-              color: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-            tooltip: 'View Analysis',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AnalysisPage()),
-              );
-            },
-          ),
+
           IconButton(
             icon: Icon(
               Icons.color_lens,

@@ -54,8 +54,8 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
   Widget build(BuildContext context) {
     // Get theme colors
     final primaryColor = Theme.of(context).primaryColor;
-    final primaryLightColor = Theme.of(context).colorScheme.primary.withOpacity(0.1);
-    final borderColor = Theme.of(context).dividerColor;
+    final primaryLightColor = Theme.of(context).colorScheme.primary.withOpacity(0.08);
+    final borderColor = Colors.grey[300];
     final hintColor = Theme.of(context).hintColor;
 
     return Column(
@@ -63,15 +63,16 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
       children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: borderColor),
+            border: Border.all(color: borderColor ?? Colors.grey[300]!),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(Icons.food_bank, color: primaryColor),
                     const SizedBox(width: 12),
@@ -83,6 +84,8 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                           hintText: 'Add an ingredient...',
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: hintColor),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
+                          isDense: true,
                         ),
                         onSubmitted: (value) {
                           _addIngredient(value);
@@ -96,6 +99,9 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                         _addIngredient(_controller.text);
                         _focusNode.requestFocus();
                       },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      visualDensity: VisualDensity.compact,
                     ),
                   ],
                 ),
@@ -111,12 +117,26 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                         label: Text(
                           ingredient,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            // Lighter text color that matches the app's design
+                            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black87,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                         backgroundColor: primaryLightColor,
-                        deleteIconColor: primaryColor,
+                        // Use a lighter color for the delete icon
+                        deleteIconColor: primaryColor.withOpacity(0.7),
                         onDeleted: () => _removeIngredient(ingredient),
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        // Add custom shape to manage border color
+                        shape: StadiumBorder(
+                          side: BorderSide(
+                            color: Colors.transparent, // Remove visible border
+                          ),
+                        ),
+                        // Add elevation for a subtle shadow instead of a border
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                       );
                     }).toList(),
                   ),
