@@ -1,3 +1,5 @@
+import 'package:bobobidou/l10n/app_localizations.dart';
+import 'package:bobobidou/pages/language_settings_page.dart';
 import 'package:bobobidou/pages/widgets/ingredients_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,9 +81,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
-
   String _formatDateTime(DateTime dateTime) {
-    return DateFormat('dd MMM yyyy - HH:mm').format(dateTime);
+    final locale = AppLocalizations.of(context).locale.languageCode;
+    return DateFormat('dd MMM yyyy - HH:mm', locale).format(dateTime);
   }
 
   @override
@@ -95,27 +97,41 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Food & Pain Tracker",
+            AppLocalizations.of(context).translate("app_title"),
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: Theme.of(context).appBarTheme.foregroundColor,
           ),
-        ),
-        actions: [
 
+        ),
+
+        actions: [
           IconButton(
             icon: Icon(
               Icons.color_lens,
               color: Theme.of(context).appBarTheme.foregroundColor,
             ),
-            tooltip: 'Theme Settings',
+            tooltip: AppLocalizations.of(context).translate('theme_settings'),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const ThemeSettingsPage()),
               );
             },
-          )
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.language,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
+            tooltip: AppLocalizations.of(context).translate('language'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
+              );
+            },
+          ),
         ],
         bottom: TabBar(
           controller: _tabController,
@@ -123,14 +139,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           indicatorWeight: 3,
           labelColor: Theme.of(context).colorScheme.onPrimary,
           unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
-          tabs: const [
+          tabs: [
             Tab(
-              icon: Icon(Icons.restaurant),
-              text: "Meals",
+              icon: const Icon(Icons.restaurant),
+              text: AppLocalizations.of(context).translate("meals_tab"),
             ),
             Tab(
-              icon: Icon(Icons.healing),
-              text: "Pain Events",
+              icon: const Icon(Icons.healing),
+              text: AppLocalizations.of(context).translate("pain_tab"),
             ),
           ],
         ),
@@ -144,7 +160,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSectionTitle("Log a Meal"),
+                _buildSectionTitle( AppLocalizations.of(context).translate("log_meal"),),
                 const SizedBox(height: 16),
                 _buildCard(
                   child: Column(
@@ -183,8 +199,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               Expanded(
                                 child: Text(
                                   _selectedMealDateTime == null
-                                      ? "Select Date and Time"
-                                      : "Date: ${_formatDateTime(_selectedMealDateTime!)}",
+                                      ?  AppLocalizations.of(context).translate("select_date")
+                                      : "${ AppLocalizations.of(context).translate("date_format")}${_formatDateTime(_selectedMealDateTime!)}",
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: _selectedMealDateTime == null ? Colors.grey[600] : Colors.black87,
@@ -217,7 +233,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: const Text("Meal logged successfully"),
+                                  content: Text(AppLocalizations.of(context).translate("meal_logged")),
                                   backgroundColor: Colors.green[700],
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
@@ -228,7 +244,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: const Text("Please fill in all fields"),
+                                  content: Text(AppLocalizations.of(context).translate("fill_all_fields")),
                                   backgroundColor: Colors.red[700],
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
@@ -246,8 +262,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             ),
                             elevation: 0,
                           ),
-                          child: const Text(
-                            "SAVE MEAL",
+                          child: Text(
+                            AppLocalizations.of(context).translate("save_meal"),
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -267,7 +283,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSectionTitle("Log a Pain Episode"),
+                _buildSectionTitle(AppLocalizations.of(context).translate("log_pain")),
                 const SizedBox(height: 16),
                 _buildCard(
                   child: Column(
@@ -298,8 +314,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               Expanded(
                                 child: Text(
                                   _selectedPainDateTime == null
-                                      ? "Select Date and Time"
-                                      : "Date: ${_formatDateTime(_selectedPainDateTime!)}",
+                                      ? AppLocalizations.of(context).translate("select_date")
+                                      : "${AppLocalizations.of(context).translate("date_format")}${_formatDateTime(_selectedPainDateTime!)}",
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: _selectedPainDateTime == null ? Colors.grey[600] : Colors.black87,
@@ -327,7 +343,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: const Text("Pain episode logged successfully"),
+                                  content: Text(AppLocalizations.of(context).translate("pain_logged")),
                                   backgroundColor: Colors.green[700],
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
@@ -338,7 +354,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: const Text("Please select date and time"),
+                                  content: Text(AppLocalizations.of(context).translate("select_date_time")),
                                   backgroundColor: Colors.red[700],
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
@@ -356,8 +372,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             ),
                             elevation: 0,
                           ),
-                          child: const Text(
-                            "LOG PAIN EPISODE",
+                          child: Text(
+                            AppLocalizations.of(context).translate("log_pain_episode"),
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -423,7 +439,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle("Recent Meals"),
+        _buildSectionTitle(AppLocalizations.of(context).translate("recent_meals"),),
         const SizedBox(height: 8),
         Container(
           height: 200,
@@ -441,7 +457,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           child: mealsProvider.meals.isEmpty
               ? Center(
             child: Text(
-              "No meals logged yet",
+    AppLocalizations.of(context).translate("no_meals"),
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 16,
@@ -481,7 +497,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle("Recent Pain Episodes"),
+        _buildSectionTitle(AppLocalizations.of(context).translate("recent_pain"),),
         const SizedBox(height: 8),
         Container(
           height: 200,
@@ -499,7 +515,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           child: painProvider.painEvents.isEmpty
               ? Center(
             child: Text(
-              "No pain episodes logged yet",
+    AppLocalizations.of(context).translate("no_pain"),
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 16,
@@ -520,8 +536,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   backgroundColor: Colors.redAccent.withOpacity(0.2),
                   child: const Icon(Icons.healing, color: Colors.redAccent),
                 ),
-                title: const Text(
-                  "Pain Episode",
+                title: Text(
+                    AppLocalizations.of(context).translate("pain_episode"),
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 subtitle: Text(_formatDateTime(pain.dateTime)),

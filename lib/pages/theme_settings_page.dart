@@ -1,3 +1,4 @@
+import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ class ThemeSettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Theme Settings'),
+        title: Text(AppLocalizations.of(context).translate("theme_settings")),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,7 +20,7 @@ class ThemeSettingsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Choose App Theme',
+              AppLocalizations.of(context).translate("choose_app_theme"),
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -29,7 +30,7 @@ class ThemeSettingsPage extends StatelessWidget {
             // Purple Theme
             _buildThemeOption(
               context: context,
-              title: 'Purple Theme',
+              title: AppLocalizations.of(context).translate("purple_theme"),
               color: const Color(0xFF6750A4),
               onTap: () {
                 appTheme.setTheme(AppTheme.lightPurpleTheme);
@@ -42,7 +43,7 @@ class ThemeSettingsPage extends StatelessWidget {
             // Green Theme
             _buildThemeOption(
               context: context,
-              title: 'Green Theme',
+              title: AppLocalizations.of(context).translate("green_theme"),
               color: Colors.green[700]!,
               onTap: () {
                 appTheme.setTheme(AppTheme.lightGreenTheme);
@@ -55,7 +56,7 @@ class ThemeSettingsPage extends StatelessWidget {
             // Blue Theme
             _buildThemeOption(
               context: context,
-              title: 'Blue Theme',
+              title: AppLocalizations.of(context).translate("blue_theme"),
               color: Colors.blue[700]!,
               onTap: () {
                 appTheme.setTheme(AppTheme.lightBlueTheme);

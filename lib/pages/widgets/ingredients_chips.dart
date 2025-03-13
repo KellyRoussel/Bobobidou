@@ -1,3 +1,4 @@
+import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class IngredientInputWidget extends StatefulWidget {
@@ -81,7 +82,7 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                         controller: _controller,
                         focusNode: _focusNode,
                         decoration: InputDecoration(
-                          hintText: 'Add an ingredient...',
+                          hintText: AppLocalizations.of(context).translate('add_ingredient'),
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: hintColor),
                           contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -148,7 +149,7 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
         Padding(
           padding: const EdgeInsets.only(left: 12),
           child: Text(
-            'Add each ingredient separately',
+            AppLocalizations.of(context).translate('add_separately'),
             style: TextStyle(color: hintColor, fontSize: 12),
           ),
         ),

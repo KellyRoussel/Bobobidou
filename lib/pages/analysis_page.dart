@@ -1,3 +1,4 @@
+import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/analysis_provider.dart';
@@ -48,13 +49,13 @@ class _AnalysisPageState extends State<AnalysisPage> {
         elevation: 0,
         backgroundColor: primaryColor,
         title: Text(
-          "Ingredient Analysis",
+            AppLocalizations.of(context).translate("analysis_title"),
           style: TextStyle(fontWeight: FontWeight.w600, color: colorScheme.onPrimary),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh, color: colorScheme.onPrimary),
-            tooltip: 'Refresh Data',
+            tooltip:  AppLocalizations.of(context).translate("refresh_data"),
             onPressed: () async {
               setState(() {
                 _isLoading = true;
@@ -113,7 +114,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   child: sortedEntries.isEmpty && _filterQuery.isNotEmpty
                       ? Center(
                     child: Text(
-                      'No ingredients match "$_filterQuery"',
+                      '${AppLocalizations.of(context).translate("no_ingredients_match")} "$_filterQuery"',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -147,7 +148,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             ),
             const SizedBox(height: 16),
             Text(
-              "No Data Available",
+              AppLocalizations.of(context).translate("no_data"),
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -156,7 +157,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              "Start logging your meals and pain episodes to see analysis results here.",
+              AppLocalizations.of(context).translate("start_logging"),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -169,7 +170,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.add),
-              label: const Text("LOG DATA"),
+              label: Text( AppLocalizations.of(context).translate("log_data")),
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
                 foregroundColor: theme.colorScheme.onPrimary,
@@ -210,7 +211,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Pain Correlation Summary",
+            AppLocalizations.of(context).translate("pain_correlation"),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -306,7 +307,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
           ),
           const SizedBox(height: 16),
           Text(
-            "These ingredients appear most frequently before pain episodes.",
+            AppLocalizations.of(context).translate("ingredients_appear"),
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
@@ -332,7 +333,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
           });
         },
         decoration: InputDecoration(
-          hintText: "Search ingredients...",
+          hintText: AppLocalizations.of(context).translate("search_ingredients"),
           prefixIcon: Icon(Icons.search, color: primaryColor),
           suffixIcon: _filterQuery.isNotEmpty
               ? IconButton(
@@ -428,7 +429,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   ),
                 ),
                 subtitle: Text(
-                  "May trigger pain episodes",
+                  AppLocalizations.of(context).translate("may_trigger"),
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 13,
@@ -442,7 +443,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                     border: Border.all(color: severityColor.withOpacity(0.3)),
                   ),
                   child: Text(
-                    "${entry.value} occurrences",
+                    "${entry.value} ${AppLocalizations.of(context).translate("occurrences")}",
                     style: TextStyle(
                       color: severityColor,
                       fontWeight: FontWeight.bold,
@@ -462,12 +463,12 @@ class _AnalysisPageState extends State<AnalysisPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "This ingredient has been associated with ${entry.value} pain episodes.",
+                              "${AppLocalizations.of(context).translate("associated_with")} ${entry.value} ${AppLocalizations.of(context).translate("pain_episodes")}.",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              "Correlation score: ${(ratio * 100).toStringAsFixed(1)}%",
+                              "${AppLocalizations.of(context).translate("correlation_score")} ${(ratio * 100).toStringAsFixed(1)}%",
                               style: TextStyle(
                                 fontSize: 16,
                                 color: severityColor,
@@ -477,10 +478,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
                             const SizedBox(height: 16),
                             Text(
                               ratio > 0.5
-                                  ? "It's highly recommended to avoid this ingredient to reduce pain episodes."
+                                  ? AppLocalizations.of(context).translate("highly_recommended")
                                   : ratio > 0.25
-                                  ? "Consider reducing consumption of this ingredient."
-                                  : "This ingredient has a low correlation with pain episodes.",
+                                  ? AppLocalizations.of(context).translate("consider_reducing")
+                                  : AppLocalizations.of(context).translate("low_correlation"),
                               style: const TextStyle(fontSize: 16),
                             ),
                           ],
@@ -489,7 +490,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text("CLOSE"),
+                          child: Text(AppLocalizations.of(context).translate("close")),
                         ),
                       ],
                     ),
