@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme extends ChangeNotifier {
-  ThemeData _currentTheme = lightPurpleTheme;
+  ThemeData _currentTheme = logoInspiredTheme;
 
   ThemeData get currentTheme => _currentTheme;
 
@@ -79,5 +79,26 @@ class AppTheme extends ChangeNotifier {
     ),
   );
 
-
+  // Alternative theme - Light
+  static final ThemeData logoInspiredTheme = ThemeData(
+    primaryColor: const Color(0xFFE07A7A), // Softer coral/pink
+    colorScheme: ColorScheme.light(
+      primary: const Color(0xFFE07A7A), // Softer coral/pink
+      secondary: const Color(0xFF3A97B0), // More muted blue
+      onPrimary: Colors.white,
+      surface: Colors.white,
+      onSurface: Colors.black,
+    ),
+    scaffoldBackgroundColor: const Color(0xFFFFF0E5), // Soft peach background
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xFFE07A7A), // Softer coral/pink
+      foregroundColor: Colors.white,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFE07A7A), // Softer coral/pink
+        foregroundColor: Colors.white,
+      ),
+    ),
+  );
 }

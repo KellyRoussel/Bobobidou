@@ -63,6 +63,19 @@ class ThemeSettingsPage extends StatelessWidget {
               },
               isSelected: appTheme.currentTheme.primaryColor == Colors.blue[700],
             ),
+
+            const SizedBox(height: 12),
+            
+            // Logo Theme
+             _buildThemeOption(
+              context: context,
+              title: AppLocalizations.of(context).translate("blue_theme"),
+              color: Color(0xFFE07A7A),
+              onTap: () {
+                appTheme.setTheme(AppTheme.logoInspiredTheme);
+              },
+              isSelected: appTheme.currentTheme.primaryColor == Color(0xFFE07A7A),
+            ),
           ],
         ),
       ),
