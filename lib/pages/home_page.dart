@@ -1,6 +1,6 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/pages/language_settings_page.dart';
-import 'package:bobobidou/pages/widgets/ingredients_chips.dart';
+import 'package:bobobidou/pages/widgets/ingredients_input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/meal.dart';

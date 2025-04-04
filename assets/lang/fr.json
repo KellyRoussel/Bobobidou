@@ -40,5 +40,11 @@
   "close": "FERMER",
   "language": "Langue",
   "english": "Anglais",
-  "french": "Français"
+  "french": "Français",
+  "take_photo": "Prendre une photo",
+  "take_photo_for_ingredients": "Prendre une photo pour détecter automatiquement les ingrédients",
+  "analyzing_image": "Analyse de l'image...",
+  "ingredient_detection_error": "Impossible de détecter les ingrédients. Essayez à nouveau ou ajouter-les manuellement.",
+  "camera_initialization_error": "Impossible de démarrer la caméra. Vérfiez les permissions.",
+  "or_take_photo": "ou prendre une photo"
 }

@@ -1,4 +1,5 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
+import 'package:bobobidou/pages/camera_page.dart';
 import 'package:flutter/material.dart';
 
 class IngredientInputWidget extends StatefulWidget {
@@ -44,11 +45,35 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
     }
   }
 
+  void _addMultipleIngredients(List<String> newIngredients) {
+    if (newIngredients.isNotEmpty) {
+      setState(() {
+        for (final ingredient in newIngredients) {
+          if (ingredient.trim().isNotEmpty &&
+              !_ingredients.contains(ingredient.trim())) {
+            _ingredients.add(ingredient.trim());
+          }
+        }
+      });
+      widget.onIngredientsChanged(_ingredients);
+    }
+  }
+
   void _removeIngredient(String ingredient) {
     setState(() {
       _ingredients.remove(ingredient);
     });
     widget.onIngredientsChanged(_ingredients);
+  }
+
+  void _openCamera() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CameraPage(
+          onIngredientsDetected: _addMultipleIngredients,
+        ),
+      ),
+    );
   }
 
   @override
@@ -104,6 +129,16 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                       constraints: const BoxConstraints(),
                       visualDensity: VisualDensity.compact,
                     ),
+                    const SizedBox(width: 8),
+                    // Camera button for taking pictures
+                    IconButton(
+                      icon: Icon(Icons.camera_alt, color: primaryColor),
+                      onPressed: _openCamera,
+                      tooltip: AppLocalizations.of(context).translate('take_photo_for_ingredients'),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      visualDensity: VisualDensity.compact,
+                    ),
                   ],
                 ),
               ),
@@ -118,24 +153,20 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                         label: Text(
                           ingredient,
                           style: TextStyle(
-                            // Lighter text color that matches the app's design
                             color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black87,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
                         backgroundColor: primaryLightColor,
-                        // Use a lighter color for the delete icon
                         deleteIconColor: primaryColor.withOpacity(0.7),
                         onDeleted: () => _removeIngredient(ingredient),
                         visualDensity: VisualDensity.compact,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        // Add custom shape to manage border color
                         shape: StadiumBorder(
                           side: BorderSide(
-                            color: Colors.transparent, // Remove visible border
+                            color: Colors.transparent,
                           ),
                         ),
-                        // Add elevation for a subtle shadow instead of a border
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                       );
@@ -148,9 +179,25 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
         const SizedBox(height: 4),
         Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: Text(
-            AppLocalizations.of(context).translate('add_separately'),
-            style: TextStyle(color: hintColor, fontSize: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context).translate('add_separately'),
+                  style: TextStyle(color: hintColor, fontSize: 12),
+                ),
+              ),
+              Text(
+                AppLocalizations.of(context).translate('or_take_photo'),
+                style: TextStyle(color: hintColor, fontSize: 12),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                Icons.camera_alt,
+                color: hintColor,
+                size: 12,
+              ),
+            ],
           ),
         ),
       ],

@@ -44,5 +44,11 @@
   "choose_app_theme": "Choose App Theme",
   "purple_theme": "Purple Theme",
   "green_theme": "Green Theme",
-  "blue_theme": "Blue Theme"
+  "blue_theme": "Blue Theme",
+  "take_photo": "Take Photo",
+  "take_photo_for_ingredients": "Take a photo to detect ingredients",
+  "analyzing_image": "Analyzing your food image...",
+  "ingredient_detection_error": "Unable to detect ingredients. Please try again or add them manually.",
+  "camera_initialization_error": "Unable to initialize camera. Please check permissions.",
+  "or_take_photo": "or take a photo"
 }
