@@ -46,5 +46,11 @@
   "analyzing_image": "Analyse de l'image...",
   "ingredient_detection_error": "Impossible de détecter les ingrédients. Essayez à nouveau ou ajouter-les manuellement.",
   "camera_initialization_error": "Impossible de démarrer la caméra. Vérfiez les permissions.",
-  "or_take_photo": "ou prendre une photo"
+  "or_take_photo": "ou prendre une photo",
+  "auth_required": "Vous devez vous authentifier pour utiliser la reconnaissance automatique",
+  "login_failed": "Echec d'authentification.",
+  "login_success": "Authentification réussie",
+  "authentication": "Authentification",
+  "please_login": "Connectez-vous pour continuer",
+  "continue_with_google": "Continuer avec Google"
 }

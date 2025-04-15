@@ -50,5 +50,11 @@
   "analyzing_image": "Analyzing your food image...",
   "ingredient_detection_error": "Unable to detect ingredients. Please try again or add them manually.",
   "camera_initialization_error": "Unable to initialize camera. Please check permissions.",
-  "or_take_photo": "or take a photo"
+  "or_take_photo": "or take a photo",
+  "auth_required": "Authentication is required to use the camera",
+  "login_failed": "Login failed. Please try again.",
+  "login_success": "Successfully logged in",
+  "authentication": "Authentication",
+  "please_login": "Please log in to continue",
+  "continue_with_google": "Continue with Google"
 }

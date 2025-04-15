@@ -1,6 +1,8 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/pages/camera_page.dart';
+import 'package:bobobidou/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class IngredientInputWidget extends StatefulWidget {
   final List<String> initialIngredients;
@@ -67,6 +69,25 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
   }
 
   void _openCamera() async {
+    // Vérifier si l'utilisateur est authentifié
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (!authProvider.isAuthenticated) {
+      // Si l'utilisateur n'est pas authentifié, lancer le flux d'authentification
+      final bool success = await authProvider.login(context);
+      if (!success) {
+        // Si l'authentification échoue, afficher un message et quitter
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).translate('auth_required')),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+    }
+
+    // Si l'utilisateur est authentifié, ouvrir la page de la caméra
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => CameraPage(

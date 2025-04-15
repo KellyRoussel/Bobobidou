@@ -1,15 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bobobidou/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class FoodImageRecognitionService {
-  final String apiUrlBase = 'http://192.168.1.42:8080/bobobidou/ingredients';
+  final String apiUrlBase = 'https://kellyroussel-backend.onrender.com/bobobidou/ingredients';
+  final AuthService _authService = AuthService();
+
 
   /// Sends an image to the backend and returns a list of detected ingredients
   Future<List<String>> recognizeIngredientsFromImage(File imageFile, {String language = 'en'}) async {
     try {
-      print("========> ICI");
+      final token = await _authService.getToken();
+      if (token == null) {
+        throw Exception('Authentication token not found. Please login again.');
+      }
+
       // Build full URL with query parameter
       final uri = Uri.parse(apiUrlBase).replace(queryParameters: {
         'language': language,
@@ -31,6 +38,8 @@ class FoodImageRecognitionService {
       );
 
       request.files.add(multipartFile);
+      request.headers['Authorization'] = 'Bearer $token';
+
 
       // Send the request
       final streamedResponse = await request.send();

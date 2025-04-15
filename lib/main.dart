@@ -1,3 +1,4 @@
+import 'package:bobobidou/providers/auth_provider.dart';
 import 'package:bobobidou/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => MealsProvider()),
         ChangeNotifierProvider(create: (_) => PainProvider()),
         ChangeNotifierProvider(create: (_) => AnalysisProvider()),
