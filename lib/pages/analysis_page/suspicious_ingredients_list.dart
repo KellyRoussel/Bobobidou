@@ -37,7 +37,7 @@ class SuspiciousIngredientsList extends StatelessWidget {
           child: ListView.separated(
             padding: const EdgeInsets.all(0),
             itemCount: sortedEntries.length,
-            separatorBuilder: (context, index) => const Divider(height: 1),
+            separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey[600],),
             itemBuilder: (context, index) {
               final entry = sortedEntries[index];
 

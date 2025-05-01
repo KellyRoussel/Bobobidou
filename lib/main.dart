@@ -9,7 +9,7 @@ import 'providers/locale_provider.dart';
 import 'providers/meals_provider.dart';
 import 'providers/pain_provider.dart';
 import 'providers/analysis_provider.dart';
-import 'pages/home_page.dart';
+import 'pages/home_page/home_page.dart';
 
 void main() {
   runApp(const MyApp());

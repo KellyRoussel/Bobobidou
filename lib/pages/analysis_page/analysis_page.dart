@@ -205,6 +205,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
         },
         decoration: InputDecoration(
           hintText: AppLocalizations.of(context).translate("search_ingredients"),
+          hintStyle: TextStyle(color: Colors.grey[600]),
           prefixIcon: Icon(Icons.search, color: primaryColor),
           suffixIcon: _filterQuery.isNotEmpty
               ? IconButton(

@@ -206,12 +206,14 @@ class _TimelineGraphState extends State<TimelineGraph> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                AppLocalizations.of(context).translate("temporal_patterns"),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: primaryColor,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context).translate("temporal_patterns"),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
+                  ),
                 ),
               ),
               IconButton(
@@ -221,14 +223,6 @@ class _TimelineGraphState extends State<TimelineGraph> {
               ),
             ],
           ),
-          /*const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context).translate("temporal_description"),
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
-          ),*/
           const SizedBox(height: 16),
           SizedBox(
             height: 200,

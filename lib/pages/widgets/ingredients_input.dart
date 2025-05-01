@@ -211,13 +211,13 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
               /*Text(
                 AppLocalizations.of(context).translate('or_take_photo'),
                 style: TextStyle(color: hintColor, fontSize: 12),
-              ),*/
+              ),
               const SizedBox(width: 4),
               Icon(
                 Icons.camera_alt,
                 color: hintColor,
                 size: 12,
-              ),
+              ),*/
             ],
           ),
         ),
