@@ -2,6 +2,7 @@ import 'package:bobobidou/providers/auth_provider.dart';
 import 'package:bobobidou/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/locale_provider.dart';
@@ -12,6 +13,18 @@ import 'pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
+  warmUpBackend();
+}
+
+Future<void> warmUpBackend() async {
+  try {
+    print("=========> Warming up");
+    final response = await http.get(Uri.parse('https://kellyroussel-backend.onrender.com/health'));
+    print('=========> ✅ Backend warmup request status: ${response.statusCode}');
+  } catch (e) {
+    print('❌ Backend warmup request failed: $e');
+    // No need to handle the error, just log it
+  }
 }
 
 class MyApp extends StatelessWidget {

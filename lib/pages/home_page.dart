@@ -1,5 +1,6 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/pages/language_settings_page.dart';
+import 'package:bobobidou/pages/widgets/backup_button.dart';
 import 'package:bobobidou/pages/widgets/ingredients_input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,7 @@ import '../models/meal.dart';
 import '../models/pain_event.dart';
 import '../providers/meals_provider.dart';
 import '../providers/pain_provider.dart';
-import 'analysis_page.dart';
+import 'analysis_page/analysis_page.dart';
 import 'package:intl/intl.dart';
 import 'theme_settings_page.dart'; // Add this import
 
@@ -106,6 +107,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
 
         actions: [
+          BackupButton(),
           IconButton(
             icon: Icon(
               Icons.color_lens,
@@ -436,6 +438,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Widget _buildRecentItems(MealsProvider mealsProvider) {
+    int maxItems = 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -466,7 +469,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           )
               : ListView.separated(
             padding: const EdgeInsets.all(8),
-            itemCount: mealsProvider.meals.length > 5 ? 5 : mealsProvider.meals.length,
+            itemCount: mealsProvider.meals.length > maxItems ? maxItems : mealsProvider.meals.length,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final reversedIndex = mealsProvider.meals.length - 1 - index;
@@ -494,6 +497,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Widget _buildRecentPainEvents(PainProvider painProvider) {
+    int maxItems = 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -524,7 +528,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           )
               : ListView.separated(
             padding: const EdgeInsets.all(8),
-            itemCount: painProvider.painEvents.length > 5 ? 5 : painProvider.painEvents.length,
+            itemCount: painProvider.painEvents.length > maxItems ? maxItems : painProvider.painEvents.length,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final reversedIndex = painProvider.painEvents.length - 1 - index;

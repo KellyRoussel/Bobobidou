@@ -14,7 +14,7 @@
   "no_pain": "No pain episodes logged yet",
   "pain_episode": "Pain Episode",
   "add_ingredient": "Add an ingredient...",
-  "add_separately": "Add each ingredient separately",
+  "add_separately": "Add each ingredient separately or take a photo",
   "fill_all_fields": "Please fill in all fields",
   "select_date_time": "Please select date and time",
   "meal_logged": "Meal logged successfully",
@@ -56,5 +56,6 @@
   "login_success": "Successfully logged in",
   "authentication": "Authentication",
   "please_login": "Please log in to continue",
-  "continue_with_google": "Continue with Google"
+  "continue_with_google": "Continue with Google",
+  "temporal_patterns": "Pain and Mean Timeline"
 }

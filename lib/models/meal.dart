@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 
-class Meal {
+class OldMeal {
   final int? id;
   final DateTime dateTime;
   final List<String> ingredients;
 
-  Meal({this.id, required this.dateTime, required this.ingredients});
+  OldMeal({this.id, required this.dateTime, required this.ingredients});
 
   // Conversion en Map pour le stockage en base de données.
   Map<String, dynamic> toMap() {
@@ -16,11 +16,24 @@ class Meal {
     };
   }
 
-  factory Meal.fromMap(Map<String, dynamic> map) {
-    return Meal(
+  factory OldMeal.fromMap(Map<String, dynamic> map) {
+    return OldMeal(
       id: map['id'],
       dateTime: DateTime.parse(map['dateTime']),
       ingredients: (map['ingredients'] as String).split(','),
     );
   }
+}
+
+// Helper class for migration
+class Meal {
+  final int? id;
+  final DateTime dateTime;
+  final List<String> ingredients;
+
+  Meal({
+    this.id,
+    required this.dateTime,
+    required this.ingredients,
+  });
 }

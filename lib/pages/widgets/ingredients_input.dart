@@ -208,10 +208,10 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                   style: TextStyle(color: hintColor, fontSize: 12),
                 ),
               ),
-              Text(
+              /*Text(
                 AppLocalizations.of(context).translate('or_take_photo'),
                 style: TextStyle(color: hintColor, fontSize: 12),
-              ),
+              ),*/
               const SizedBox(width: 4),
               Icon(
                 Icons.camera_alt,
