@@ -168,7 +168,7 @@ class DatabaseHelper {
     return await db.transaction((txn) async {
       // 1. Insert the meal
       final mealId = await txn.insert('meals', {
-        'dateTime': meal.dateTime,
+        'dateTime': meal.dateTime.toIso8601String(),
       });
 
       // 2. Insert or get IDs for each ingredient
