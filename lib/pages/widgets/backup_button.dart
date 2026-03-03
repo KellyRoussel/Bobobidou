@@ -66,7 +66,6 @@ class BackupButton extends StatelessWidget {
   Future<bool> _checkAndRequestPermission() async {
 
         final status = await Permission.storage.status;
-        print("STATUS: $status");
         if (status != PermissionStatus.granted) {
           final result = await Permission.manageExternalStorage.request();
           return result == PermissionStatus.granted;

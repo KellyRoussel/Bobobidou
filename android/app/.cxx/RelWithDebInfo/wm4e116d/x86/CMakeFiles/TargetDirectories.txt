@@ -1,0 +1,2 @@
+C:/Users/Kelly/StudioProjects/bobobidou/android/app/.cxx/RelWithDebInfo/wm4e116d/x86/CMakeFiles/edit_cache.dir
+C:/Users/Kelly/StudioProjects/bobobidou/android/app/.cxx/RelWithDebInfo/wm4e116d/x86/CMakeFiles/rebuild_cache.dir

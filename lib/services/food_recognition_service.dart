@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bobobidou/config/app_config.dart';
 import 'package:bobobidou/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class FoodImageRecognitionService {
-  final String apiUrlBase = 'https://kellyroussel-backend.onrender.com/bobobidou/ingredients';
+  final String apiUrlBase = '${AppConfig.backendUrl}/bobobidou/ingredients';
   final AuthService _authService = AuthService();
 
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bobobidou/config/app_config.dart';
 import 'package:bobobidou/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -9,8 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class AuthService {
-  // Remplacez par l'URL de votre backend
-  static const String _baseUrl = 'https://kellyroussel-backend.onrender.com';
+  static String get _baseUrl => AppConfig.backendUrl;
   static const String _tokenKey = 'auth_token';
   static const String _userKey = 'user_data';
 
@@ -59,10 +59,9 @@ class AuthService {
   Future<bool> initiateGoogleAuth(BuildContext context) async {
     try {
       // 1. Obtenir l'URL d'authentification du backend
-      final response = await http.get(Uri.parse('$_baseUrl/login/google'));
+      final response = await http.get(Uri.parse('$_baseUrl/login/google/bobobidou'));
 
       if (response.statusCode != 200) {
-        print(Uri.parse('$_baseUrl/login/google'));
         throw Exception('Failed to get authentication URL');
       }
       
@@ -83,11 +82,12 @@ class AuthService {
 
       // 4. Échanger le code contre un token
       final tokenResponse = await http.get(
-        Uri.parse('$_baseUrl/auth/exchange?code=$code'),
+        Uri.parse('$_baseUrl/auth/exchange/bobobidou?code=$code&service=GOOGLE'),
       );
       
       if (tokenResponse.statusCode != 200) {
-        throw Exception('Failed to exchange code for token');
+        debugPrint('Exchange response body: ${tokenResponse.body}');
+        throw Exception('Failed to exchange code for token (${tokenResponse.statusCode})');
       }
       
       final tokenData = jsonDecode(tokenResponse.body);
