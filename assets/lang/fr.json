@@ -14,7 +14,7 @@
   "no_pain": "Aucun épisode de douleur enregistré",
   "pain_episode": "Épisode de Douleur",
   "add_ingredient": "Ajouter un ingrédient...",
-  "add_separately": "Ajoutez chaque ingrédient séparément",
+  "add_separately": "Ajoutez chaque ingrédient séparément ou prenez une photo",
   "fill_all_fields": "Veuillez remplir tous les champs",
   "select_date_time": "Veuillez sélectionner date et heure",
   "meal_logged": "Repas enregistré avec succès",
@@ -52,5 +52,6 @@
   "login_success": "Authentification réussie",
   "authentication": "Authentification",
   "please_login": "Connectez-vous pour continuer",
-  "continue_with_google": "Continuer avec Google"
+  "continue_with_google": "Continuer avec Google",
+  "temporal_patterns": "Chronologie des douleurs et repas"
 }
