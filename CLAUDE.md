@@ -29,6 +29,26 @@ flutter pub run flutter_native_splash:create
 
 # Get dependencies
 flutter pub get
+
+# Build the Play Store bundle (needs android/key.properties, see below)
+flutter build appbundle --release
+```
+
+### Release signing
+
+Release builds are signed with the upload keystore described in `android/key.properties` (git-ignored, like `*.jks`). Without this file the release build falls back to the debug keys, which Google Play refuses.
+
+```bash
+# One-time: create the upload keystore (keep it and its passwords safe, outside the repo)
+keytool -genkey -v -keystore ~/bobobidou-upload.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
+
+```properties
+# android/key.properties
+storePassword=<keystore password>
+keyPassword=<key password>
+keyAlias=upload
+storeFile=/absolute/path/to/bobobidou-upload.jks
 ```
 
 ## Architecture
