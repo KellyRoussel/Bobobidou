@@ -29,6 +29,26 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Vérifie que la session est encore utilisable (renouvelle le token si besoin).
+  /// Met l'état à jour si la session a été perdue.
+  Future<bool> ensureValidSession() async {
+    if (!_isAuthenticated) return false;
+    try {
+      final token = await _authService.getValidToken();
+      if (token == null) {
+        _isAuthenticated = false;
+        _user = null;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      // Erreur réseau pendant le renouvellement : on garde la session,
+      // l'appel suivant affichera l'erreur.
+      debugPrint('Session check failed: $e');
+    }
+    return true;
+  }
+
   Future<bool> login(BuildContext context) async {
 
     _isLoading = true;

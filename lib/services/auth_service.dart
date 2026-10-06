@@ -8,11 +8,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
+/// Levée quand la session ne peut plus être renouvelée : l'utilisateur doit se reconnecter.
+class SessionExpiredException implements Exception {
+  @override
+  String toString() => 'SessionExpiredException: please login again';
+}
 
 class AuthService {
   static String get _baseUrl => AppConfig.backendUrl;
   static const String _tokenKey = 'auth_token';
+  static const String _refreshTokenKey = 'refresh_token';
   static const String _userKey = 'user_data';
+
+  // Marge avant expiration en dessous de laquelle on renouvelle le token
+  static const Duration _expiryMargin = Duration(minutes: 2);
+
+  // Un seul renouvellement à la fois : le backend invalide l'ancien refresh token
+  static Future<String?>? _refreshInFlight;
 
   // Pour vérifier si l'utilisateur est authentifié
   Future<bool> isAuthenticated() async {
@@ -30,6 +42,86 @@ class AuthService {
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, token);
+  }
+
+  Future<String?> getRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_refreshTokenKey);
+  }
+
+  Future<void> saveRefreshToken(String refreshToken) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_refreshTokenKey, refreshToken);
+  }
+
+  // Lire la date d'expiration (claim "exp") d'un JWT sans vérifier la signature
+  static DateTime? _tokenExpiry(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length != 3) return null;
+      final payload = jsonDecode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
+      final exp = payload['exp'];
+      if (exp is! num) return null;
+      return DateTime.fromMillisecondsSinceEpoch(exp.toInt() * 1000, isUtc: true);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static bool _isExpired(String token) {
+    final expiry = _tokenExpiry(token);
+    if (expiry == null) return true;
+    return DateTime.now().toUtc().isAfter(expiry.subtract(_expiryMargin));
+  }
+
+  /// Renvoie un access token valide, en le renouvelant si besoin.
+  /// Renvoie null si la session est perdue (les tokens locaux sont alors effacés).
+  Future<String?> getValidToken({bool forceRefresh = false}) async {
+    final token = await getToken();
+    if (token == null) return null;
+    if (!forceRefresh && !_isExpired(token)) return token;
+    return refreshAccessToken();
+  }
+
+  /// Échange le refresh token contre une nouvelle paire de tokens.
+  Future<String?> refreshAccessToken() {
+    return _refreshInFlight ??= _doRefresh().whenComplete(() => _refreshInFlight = null);
+  }
+
+  Future<String?> _doRefresh() async {
+    final refreshToken = await getRefreshToken();
+    if (refreshToken == null) {
+      await logout();
+      return null;
+    }
+
+    final http.Response response;
+    try {
+      response = await http.post(
+        Uri.parse('$_baseUrl/auth/refresh-token'),
+        headers: {'X-Refresh-Token': refreshToken},
+      );
+    } catch (e) {
+      // Erreur réseau : on garde la session, l'appelant affichera une erreur
+      debugPrint('Refresh token network error: $e');
+      rethrow;
+    }
+
+    if (response.statusCode == 401 || response.statusCode == 404) {
+      await logout();
+      return null;
+    }
+    if (response.statusCode != 200) {
+      throw Exception('Failed to refresh token (${response.statusCode})');
+    }
+
+    final data = jsonDecode(response.body);
+    final String accessToken = data['access_token'];
+    await saveToken(accessToken);
+    if (data['refresh_token'] != null) {
+      await saveRefreshToken(data['refresh_token']);
+    }
+    return accessToken;
   }
 
   // Enregistrer les données utilisateur dans le stockage local
@@ -52,6 +144,7 @@ class AuthService {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
+    await prefs.remove(_refreshTokenKey);
     await prefs.remove(_userKey);
   }
 
@@ -98,6 +191,9 @@ class AuthService {
       
       // 5. Enregistrer le token et l'utilisateur dans le stockage local
       await saveToken(accessToken);
+      if (tokenData['refresh_token'] != null) {
+        await saveRefreshToken(tokenData['refresh_token']);
+      }
       await saveUser(user);
 
       
