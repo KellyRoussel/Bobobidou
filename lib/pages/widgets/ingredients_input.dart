@@ -72,9 +72,14 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
     // Vérifier si l'utilisateur est authentifié
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    if (!authProvider.isAuthenticated) {
+    // Renouveler le token si besoin ; si la session est perdue, on repasse par le login
+    final hasSession = await authProvider.ensureValidSession();
+    if (!mounted) return;
+
+    if (!hasSession) {
       // Si l'utilisateur n'est pas authentifié, lancer le flux d'authentification
       final bool success = await authProvider.login(context);
+      if (!mounted) return;
       if (!success) {
         // Si l'authentification échoue, afficher un message et quitter
         ScaffoldMessenger.of(context).showSnackBar(
