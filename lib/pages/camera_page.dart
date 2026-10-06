@@ -57,8 +57,9 @@ class _CameraPageState extends State<CameraPage> {
       return;
     }
 
+    final imageFile = File(image.path);
     setState(() {
-      _imageFile = File(image.path);
+      _imageFile = imageFile;
     });
 
     await _analyzePicture();
