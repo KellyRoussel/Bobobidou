@@ -57,5 +57,8 @@
   "authentication": "Authentication",
   "please_login": "Please log in to continue",
   "continue_with_google": "Continue with Google",
-  "temporal_patterns": "Pain and Mean Timeline"
+  "temporal_patterns": "Pain and Mean Timeline",
+  "backup_tooltip": "Back up my data",
+  "backup_share_subject": "BoboBidou backup",
+  "backup_failed": "Backup failed. Please try again."
 }

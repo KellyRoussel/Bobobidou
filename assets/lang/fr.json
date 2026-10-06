@@ -53,5 +53,8 @@
   "authentication": "Authentification",
   "please_login": "Connectez-vous pour continuer",
   "continue_with_google": "Continuer avec Google",
-  "temporal_patterns": "Chronologie des douleurs et repas"
+  "temporal_patterns": "Chronologie des douleurs et repas",
+  "backup_tooltip": "Sauvegarder mes données",
+  "backup_share_subject": "Sauvegarde BoboBidou",
+  "backup_failed": "La sauvegarde a échoué. Veuillez réessayer."
 }

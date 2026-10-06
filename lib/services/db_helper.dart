@@ -286,24 +286,23 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final originalPath = join(dbPath, 'app.db');
 
-    // Get external storage directory that persists after uninstall
-    final directory = await getExternalStorageDirectory(); // For Android
-    // Alternative: final directory = await getApplicationDocumentsDirectory(); // For iOS
-
-    // Create a dedicated backup folder
-    final backupDir = Directory('${directory!.path}/bobobidou_backups');
+    // App-private temporary folder: no storage permission needed. The file is
+    // then handed to the Android share sheet so the user can save it where
+    // they want (Drive, Files, e-mail...), outside of the app.
+    final directory = await getTemporaryDirectory();
+    final backupDir = Directory('${directory.path}/bobobidou_backups');
     if (!await backupDir.exists()) {
       await backupDir.create(recursive: true);
     }
 
-    // Create backup with timestamp
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final backupPath = '${backupDir.path}/backup_$timestamp.db';
+    // Create backup with a readable timestamp
+    final timestamp = DateTime.now().toIso8601String().split('.').first.replaceAll(':', '-');
+    final backupPath = '${backupDir.path}/bobobidou_backup_$timestamp.db';
 
     // Copy the database file
     await File(originalPath).copy(backupPath);
 
-    return backupPath; // Return the backup path so you can show it to the user
+    return backupPath;
   }
 
 
