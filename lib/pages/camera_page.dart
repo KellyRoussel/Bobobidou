@@ -34,85 +34,108 @@ class _CameraPageState extends State<CameraPage> {
   Future<void> _takePicture() async {
     if (_isProcessing) return;
 
+    final XFile? image;
     try {
-      final XFile? image = await _picker.pickImage(
+      image = await _picker.pickImage(
         source: ImageSource.camera,
         maxWidth: 1200,
         maxHeight: 1200,
         imageQuality: 85,
       );
+    } catch (e) {
+      debugPrint('Camera error: $e');
+      if (!mounted) return;
+      _showError();
+      if (_imageFile == null) Navigator.of(context).pop();
+      return;
+    }
+    if (!mounted) return;
 
-      // User canceled the picker
-      if (image == null) {
-        Navigator.of(context).pop();
-        return;
-      }
+    if (image == null) {
+      // User canceled the picker: leave only if there is no previous photo
+      if (_imageFile == null) Navigator.of(context).pop();
+      return;
+    }
 
-      setState(() {
-        _imageFile = File(image.path);
-        _isProcessing = true;
-      });
+    final imageFile = File(image.path);
+    setState(() {
+      _imageFile = imageFile;
+    });
 
-      // Show processing indicator
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(
-                color: Theme.of(context).primaryColor,
-              ),
-              const SizedBox(height: 16),
-              Text(AppLocalizations.of(context).translate('analyzing_image')),
-            ],
-          ),
+    await _analyzePicture();
+  }
+
+  /// Sends the current picture to the backend and returns the detected
+  /// ingredients to the caller. On error, stays on the page so the user can
+  /// retry or retake the picture.
+  Future<void> _analyzePicture() async {
+    if (_isProcessing || _imageFile == null) return;
+
+    setState(() {
+      _isProcessing = true;
+    });
+
+    // Show processing indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
+            const SizedBox(height: 16),
+            Text(AppLocalizations.of(context).translate('analyzing_image')),
+          ],
         ),
-      );
+      ),
+    );
 
-      // Send the image to the backend for recognition
-      String language = AppLocalizations.of(context).locale.languageCode;
-      final ingredients = await _recognitionService.recognizeIngredientsFromImage(_imageFile!, language: language);
+    try {
+      final language = AppLocalizations.of(context).locale.languageCode;
+      final ingredients = await _recognitionService.recognizeIngredientsFromImage(
+        _imageFile!,
+        language: language,
+      );
+      if (!mounted) return;
 
       // Close the processing dialog
       Navigator.of(context).pop();
 
-      // Return the detected ingredients
+      // Return the detected ingredients and go back to the previous screen
       widget.onIngredientsDetected(ingredients);
-
-      // Go back to the previous screen
       Navigator.of(context).pop();
     } catch (e) {
-      print("\n\n =======================> ERROR: $e");
-      // Close processing dialog if open
-      if (_isProcessing) {
-        Navigator.of(context).pop();
-      }
+      debugPrint('Ingredient recognition error: $e');
+      if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context).translate('ingredient_detection_error') + "$e",
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-
-      // Go back if there was an error
+      // Close the processing dialog
       Navigator.of(context).pop();
+      _showError();
     } finally {
-      setState(() {
-        _isProcessing = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
     }
   }
 
+  void _showError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context).translate('ingredient_detection_error'),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   Future<void> _retakePicture() async {
-    setState(() {
-      _imageFile = null;
-    });
-    _takePicture();
+    await _takePicture();
   }
 
   @override
@@ -157,61 +180,7 @@ class _CameraPageState extends State<CameraPage> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.check),
                   label: Text(AppLocalizations.of(context).translate('use_photo')),
-                  onPressed: _isProcessing
-                      ? null
-                      : () async {
-                    setState(() {
-                      _isProcessing = true;
-                    });
-
-                    // Show processing indicator
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) => AlertDialog(
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(AppLocalizations.of(context).translate('analyzing_image')),
-                          ],
-                        ),
-                      ),
-                    );
-
-                    try {
-                      // Send the image to the backend for recognition
-                      final ingredients = await _recognitionService.recognizeIngredientsFromImage(_imageFile!);
-
-                      // Close the processing dialog
-                      Navigator.of(context).pop();
-
-                      // Return the detected ingredients
-                      widget.onIngredientsDetected(ingredients);
-
-                      // Go back to the previous screen
-                      Navigator.of(context).pop();
-                    } catch (e) {
-                      // Close processing dialog
-                      Navigator.of(context).pop();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.of(context).translate('ingredient_detection_error'),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } finally {
-                      setState(() {
-                        _isProcessing = false;
-                      });
-                    }
-                  },
+                  onPressed: _isProcessing ? null : _analyzePicture,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Theme.of(context).colorScheme.onPrimary,
