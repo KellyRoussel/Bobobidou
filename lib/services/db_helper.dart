@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/ingredient.dart';
 import '../models/meal.dart';
@@ -280,31 +278,5 @@ class DatabaseHelper {
     final db = await instance.database;
     db.close();
   }
-
-  Future<String> backupDatabase() async {
-    // Get the original database path
-    final dbPath = await getDatabasesPath();
-    final originalPath = join(dbPath, 'app.db');
-
-    // App-private temporary folder: no storage permission needed. The file is
-    // then handed to the Android share sheet so the user can save it where
-    // they want (Drive, Files, e-mail...), outside of the app.
-    final directory = await getTemporaryDirectory();
-    final backupDir = Directory('${directory.path}/bobobidou_backups');
-    if (!await backupDir.exists()) {
-      await backupDir.create(recursive: true);
-    }
-
-    // Create backup with a readable timestamp
-    final timestamp = DateTime.now().toIso8601String().split('.').first.replaceAll(':', '-');
-    final backupPath = '${backupDir.path}/bobobidou_backup_$timestamp.db';
-
-    // Copy the database file
-    await File(originalPath).copy(backupPath);
-
-    return backupPath;
-  }
-
-
 }
 
