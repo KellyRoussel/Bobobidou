@@ -53,5 +53,14 @@
   "authentication": "Authentification",
   "please_login": "Connectez-vous pour continuer",
   "continue_with_google": "Continuer avec Google",
-  "temporal_patterns": "Chronologie des douleurs et repas"
+  "temporal_patterns": "Chronologie des douleurs et repas",
+  "export_tooltip": "Exporter mes données (CSV)",
+  "export_share_subject": "Export BoboBidou",
+  "export_failed": "L'export a échoué. Veuillez réessayer.",
+  "export_column_date": "Date",
+  "export_column_time": "Heure",
+  "export_column_type": "Type",
+  "export_column_ingredients": "Ingrédients",
+  "export_type_meal": "Repas",
+  "export_type_pain": "Douleur"
 }

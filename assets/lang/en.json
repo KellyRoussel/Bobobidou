@@ -57,5 +57,14 @@
   "authentication": "Authentication",
   "please_login": "Please log in to continue",
   "continue_with_google": "Continue with Google",
-  "temporal_patterns": "Pain and Mean Timeline"
+  "temporal_patterns": "Pain and Mean Timeline",
+  "export_tooltip": "Export my data (CSV)",
+  "export_share_subject": "BoboBidou export",
+  "export_failed": "Export failed. Please try again.",
+  "export_column_date": "Date",
+  "export_column_time": "Time",
+  "export_column_type": "Type",
+  "export_column_ingredients": "Ingredients",
+  "export_type_meal": "Meal",
+  "export_type_pain": "Pain"
 }
