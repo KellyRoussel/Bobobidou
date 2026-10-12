@@ -71,14 +71,15 @@ class CsvExportService {
     final csv = buildCsv(meals, painEvents, labels);
 
     final timestamp = DateFormat('yyyy-MM-dd_HH-mm').format(DateTime.now());
-    final savedPath = await FilePicker.platform.saveFile(
+    final savedUri = await FilePicker.saveFile(
       dialogTitle: dialogTitle,
       fileName: 'bobobidou_export_$timestamp.csv',
+      mimeType: 'text/csv',
       type: FileType.custom,
       allowedExtensions: ['csv'],
       bytes: encodeWindows1252(csv),
     );
-    return savedPath != null;
+    return savedUri != null;
   }
 
   /// Encodes [text] in Windows-1252 rather than UTF-8: Google Sheets on
