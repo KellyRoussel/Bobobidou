@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/ingredient.dart';
 import '../models/meal.dart';
@@ -280,32 +278,5 @@ class DatabaseHelper {
     final db = await instance.database;
     db.close();
   }
-
-  Future<String> backupDatabase() async {
-    // Get the original database path
-    final dbPath = await getDatabasesPath();
-    final originalPath = join(dbPath, 'app.db');
-
-    // Get external storage directory that persists after uninstall
-    final directory = await getExternalStorageDirectory(); // For Android
-    // Alternative: final directory = await getApplicationDocumentsDirectory(); // For iOS
-
-    // Create a dedicated backup folder
-    final backupDir = Directory('${directory!.path}/bobobidou_backups');
-    if (!await backupDir.exists()) {
-      await backupDir.create(recursive: true);
-    }
-
-    // Create backup with timestamp
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final backupPath = '${backupDir.path}/backup_$timestamp.db';
-
-    // Copy the database file
-    await File(originalPath).copy(backupPath);
-
-    return backupPath; // Return the backup path so you can show it to the user
-  }
-
-
 }
 

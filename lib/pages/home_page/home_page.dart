@@ -4,7 +4,7 @@ import 'package:bobobidou/pages/home_page/pain_events_tabs/pain_events_tab.dart'
 import 'package:bobobidou/pages/home_page/section_card.dart';
 import 'package:bobobidou/pages/home_page/section_title.dart';
 import 'package:bobobidou/pages/language_settings_page.dart';
-import 'package:bobobidou/pages/widgets/backup_button.dart';
+import 'package:bobobidou/pages/widgets/export_button.dart';
 import 'package:bobobidou/pages/widgets/ingredients_input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
 
         actions: [
-          BackupButton(),
+          ExportButton(),
           IconButton(
             icon: Icon(
               Icons.color_lens,
