@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import '../models/meal.dart';
 import '../models/pain_event.dart';
 import 'db_helper.dart';
@@ -60,23 +61,27 @@ class CsvExportService {
     return buffer.toString();
   }
 
-  /// Writes the CSV to the app's temporary folder (no storage permission
-  /// needed) and returns its path, ready to be handed to the share sheet.
-  static Future<String> exportToFile(CsvExportLabels labels) async {
+  /// Opens the system "Save as" dialog so the user downloads the CSV where
+  /// they want (Downloads, Drive...). No storage permission is needed: the
+  /// system file picker grants access to the chosen location only.
+  /// Returns false if the user cancelled the dialog.
+  static Future<bool> exportToFile(
+    CsvExportLabels labels, {
+    required String dialogTitle,
+  }) async {
     final meals = await DatabaseHelper.instance.getMeals();
     final painEvents = await DatabaseHelper.instance.getPainEvents();
     final csv = buildCsv(meals, painEvents, labels);
 
-    final directory = await getTemporaryDirectory();
-    final exportDir = Directory('${directory.path}/bobobidou_exports');
-    if (!await exportDir.exists()) {
-      await exportDir.create(recursive: true);
-    }
-
     final timestamp = DateFormat('yyyy-MM-dd_HH-mm').format(DateTime.now());
-    final file = File('${exportDir.path}/bobobidou_export_$timestamp.csv');
-    await file.writeAsString(csv);
-    return file.path;
+    final savedPath = await FilePicker.platform.saveFile(
+      dialogTitle: dialogTitle,
+      fileName: 'bobobidou_export_$timestamp.csv',
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+      bytes: Uint8List.fromList(utf8.encode(csv)),
+    );
+    return savedPath != null;
   }
 
   static String _line(List<String> fields) =>
