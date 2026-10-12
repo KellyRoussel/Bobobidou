@@ -21,6 +21,8 @@ class _MealsTabState extends State<MealsTab> {
 
   late DateTime _selectedMealDateTime;
   List<String> _selectedIngredients = [];
+  // Incremented after a meal is saved to rebuild the ingredient input empty
+  int _ingredientInputVersion = 0;
 
   Future<DateTime?> _pickDateTime(BuildContext context) async {
     final date = await showDatePicker(
@@ -92,6 +94,7 @@ class _MealsTabState extends State<MealsTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 IngredientInputWidget(
+                  key: ValueKey(_ingredientInputVersion),
                   onIngredientsChanged: (ingredients) {
                     setState(() {
                       _selectedIngredients = ingredients;
@@ -145,7 +148,7 @@ class _MealsTabState extends State<MealsTab> {
                       if (_selectedIngredients.isNotEmpty) {
                         Meal meal = Meal(
                           dateTime: _selectedMealDateTime,
-                          ingredients: _selectedIngredients,
+                          ingredients: List.of(_selectedIngredients),
                         );
 
                         await mealsProvider.addMeal(meal);
@@ -153,6 +156,7 @@ class _MealsTabState extends State<MealsTab> {
                         setState(() {
                           _selectedMealDateTime = DateTime.now();
                           _selectedIngredients = [];
+                          _ingredientInputVersion++;
                         });
 
                         ScaffoldMessenger.of(context).showSnackBar(
