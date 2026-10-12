@@ -13,7 +13,7 @@ void main() {
     pain: 'Douleur',
   );
 
-  test('builds a chronological timeline with BOM and ; separator', () {
+  test('builds a chronological timeline with ; separator', () {
     final csv = CsvExportService.buildCsv(
       [
         Meal(dateTime: DateTime(2026, 10, 7, 12, 30), ingredients: ['pâtes', 'tomate']),
@@ -25,7 +25,7 @@ void main() {
 
     expect(
       csv,
-      '﻿Date;Heure;Type;Ingrédients\r\n'
+      'Date;Heure;Type;Ingrédients\r\n'
       '2026-10-06;19:05;Repas;\r\n'
       '2026-10-07;12:30;Repas;pâtes, tomate\r\n'
       '2026-10-07;15:10;Douleur;\r\n',
@@ -40,5 +40,12 @@ void main() {
     );
 
     expect(csv.split('\r\n')[1], '2026-01-01;08:00;Repas;"sel; poivre, pain ""maison"""');
+  });
+
+  test('encodes French characters in Windows-1252', () {
+    expect(
+      CsvExportService.encodeWindows1252('crème œuf € 東'),
+      [0x63, 0x72, 0xE8, 0x6D, 0x65, 0x20, 0x9C, 0x75, 0x66, 0x20, 0x80, 0x20, 0x3F],
+    );
   });
 }
