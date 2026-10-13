@@ -4,6 +4,7 @@ import 'package:bobobidou/pages/home_page/pain_events_tabs/pain_events_tab.dart'
 import 'package:bobobidou/pages/home_page/section_card.dart';
 import 'package:bobobidou/pages/home_page/section_title.dart';
 import 'package:bobobidou/pages/language_settings_page.dart';
+import 'package:bobobidou/pages/profile_page.dart';
 import 'package:bobobidou/pages/widgets/export_button.dart';
 import 'package:bobobidou/pages/widgets/ingredients_input.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +83,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.account_circle,
+              color: Theme.of(context).appBarTheme.foregroundColor,
+            ),
+            tooltip: AppLocalizations.of(context).translate('profile'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfilePage()),
               );
             },
           ),

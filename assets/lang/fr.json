@@ -63,5 +63,12 @@
   "export_column_type": "Type",
   "export_column_ingredients": "Ingrédients",
   "export_type_meal": "Repas",
-  "export_type_pain": "Douleur"
+  "export_type_pain": "Douleur",
+  "profile": "Profil",
+  "signed_in_with_google": "Connecté avec Google",
+  "not_signed_in": "Non connecté",
+  "sign_in_explanation": "Connectez-vous avec votre compte Google pour utiliser la reconnaissance automatique des aliments.",
+  "logout": "Se déconnecter",
+  "logout_confirmation": "Voulez-vous vraiment vous déconnecter ?",
+  "cancel": "Annuler"
 }
