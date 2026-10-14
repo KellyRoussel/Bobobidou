@@ -1,104 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../theme/bobo_theme.dart';
 
 class AppTheme extends ChangeNotifier {
-  ThemeData _currentTheme = logoInspiredTheme;
+  static const _prefsKey = 'theme_accent';
 
+  BoboAccent _accent = BoboAccent.bobobidou;
+  ThemeData _currentTheme = BoboTheme.build(BoboAccent.bobobidou);
+
+  AppTheme() {
+    _restore();
+  }
+
+  BoboAccent get accent => _accent;
   ThemeData get currentTheme => _currentTheme;
 
-  void setTheme(ThemeData theme) {
-    _currentTheme = theme;
+  Future<void> setAccent(BoboAccent accent) async {
+    if (accent == _accent) return;
+    _apply(accent);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_prefsKey, accent.name);
+  }
+
+  void _apply(BoboAccent accent) {
+    _accent = accent;
+    _currentTheme = BoboTheme.build(accent);
     notifyListeners();
   }
 
-  // Light purple theme (your current default)
-  static final ThemeData lightPurpleTheme = ThemeData(
-    primaryColor: const Color(0xFF6750A4),
-    colorScheme: ColorScheme.light(
-      primary: const Color(0xFF6750A4),
-      secondary: const Color(0xFF6750A4),
-      onPrimary: Colors.white,
-      surface: Colors.white,
-      onSurface: Colors.black,
-    ),
-    scaffoldBackgroundColor: Colors.grey[50],
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF6750A4),
-      foregroundColor: Colors.white,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF6750A4),
-        foregroundColor: Colors.white,
-      ),
-    ),
-  );
-
-  // Alternative theme - Green
-  static final ThemeData lightGreenTheme = ThemeData(
-    primaryColor: Colors.green[700],
-    colorScheme: ColorScheme.light(
-      primary: Colors.green[700]!,
-      secondary: Colors.green[500]!,
-      onPrimary: Colors.white,
-      surface: Colors.white,
-      onSurface: Colors.black,
-    ),
-    scaffoldBackgroundColor: Colors.grey[50],
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.green[700],
-      foregroundColor: Colors.white,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green[700],
-        foregroundColor: Colors.white,
-      ),
-    ),
-  );
-
-  // Alternative theme - Blue
-  static final ThemeData lightBlueTheme = ThemeData(
-    primaryColor: Colors.blue[700],
-    colorScheme: ColorScheme.light(
-      primary: Colors.blue[700]!,
-      secondary: Colors.blue[500]!,
-      onPrimary: Colors.white,
-      surface: Colors.white,
-      onSurface: Colors.black,
-    ),
-    scaffoldBackgroundColor: Colors.grey[50],
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.blue[700],
-      foregroundColor: Colors.white,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue[700],
-        foregroundColor: Colors.white,
-      ),
-    ),
-  );
-
-  // Alternative theme - Light
-  static final ThemeData logoInspiredTheme = ThemeData(
-    primaryColor: const Color(0xFFE07A7A), // Softer coral/pink
-    colorScheme: ColorScheme.light(
-      primary: const Color(0xFFE07A7A), // Softer coral/pink
-      secondary: const Color(0xFF3A97B0), // More muted blue
-      onPrimary: Colors.white,
-      surface: Colors.white,
-      onSurface: Colors.black,
-    ),
-    scaffoldBackgroundColor: const Color(0xFFFFF0E5), // Soft peach background
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFFE07A7A), // Softer coral/pink
-      foregroundColor: Colors.white,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFE07A7A), // Softer coral/pink
-        foregroundColor: Colors.white,
-      ),
-    ),
-  );
+  Future<void> _restore() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_prefsKey);
+    final accent = BoboAccent.values.where((a) => a.name == saved);
+    if (accent.isNotEmpty) _apply(accent.first);
+  }
 }

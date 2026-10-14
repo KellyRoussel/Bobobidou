@@ -2,6 +2,7 @@ import 'package:bobobidou/pages/analysis_page/timeline_graph.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../theme/bobo_tokens.dart';
 
 class FullScreenChartPage extends StatelessWidget {
   final List<ChartDataPoint> mealEvents;
@@ -28,7 +29,7 @@ class FullScreenChartPage extends StatelessWidget {
     final ScrollController _scrollController = ScrollController();
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -39,11 +40,7 @@ class FullScreenChartPage extends StatelessWidget {
                 const SizedBox(width: 48),
                 Text(
                   AppLocalizations.of(context).translate("temporal_patterns"),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -72,8 +69,8 @@ class FullScreenChartPage extends StatelessWidget {
                             hourWidth: hourWidth,
                             hoursCount: totalHours,
                             startDate: startDate,
-                            gridColor: Colors.grey[300]!,
-                            textColor: Colors.grey[600]!,
+                            gridColor: BoboColors.ligne,
+                            textColor: BoboColors.cacaoDoux,
                           ),
                         ),
                         TimelineEventChart(
@@ -81,8 +78,8 @@ class FullScreenChartPage extends StatelessWidget {
                           hourWidth: hourWidth,
                           mealEvents: mealEvents,
                           painEvents: painEvents,
-                          mealColor: primaryColor,
-                          painColor: Colors.red,
+                          mealColor: BoboColors.repas,
+                          painColor: BoboColors.douleur,
                           startDate: startDate,
                           endDate: endDate,
                         ),
@@ -112,15 +109,15 @@ class FullScreenChartPage extends StatelessWidget {
             Container(
               width: 12,
               height: 12,
-              decoration: BoxDecoration(
-                color: primaryColor,
+              decoration: const BoxDecoration(
+                color: BoboColors.repas,
                 shape: BoxShape.circle,
               ),
             ),
             const SizedBox(width: 4),
             Text(
               AppLocalizations.of(context).translate("meals"),
-              style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -131,14 +128,14 @@ class FullScreenChartPage extends StatelessWidget {
               width: 12,
               height: 12,
               decoration: const BoxDecoration(
-                color: Colors.red,
+                color: BoboColors.douleur,
                 shape: BoxShape.circle,
               ),
             ),
             const SizedBox(width: 4),
             Text(
               AppLocalizations.of(context).translate("pain_events"),
-              style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

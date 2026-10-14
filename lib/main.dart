@@ -2,6 +2,7 @@ import 'package:bobobidou/config/app_config.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
 import 'package:bobobidou/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -53,7 +54,11 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: "Bobobidou",
             theme: appTheme.currentTheme,
-            home: const HomePage(),
+            home: const AnnotatedRegion<SystemUiOverlayStyle>(
+              // Dark status bar icons on the peach background
+              value: SystemUiOverlayStyle.dark,
+              child: HomePage(),
+            ),
             debugShowCheckedModeBanner: false,
             locale: localeProvider.locale,
             supportedLocales: const [

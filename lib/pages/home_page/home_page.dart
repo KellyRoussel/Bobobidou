@@ -1,146 +1,62 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
-import 'package:bobobidou/pages/home_page/meals_tab/meals_tab.dart';
-import 'package:bobobidou/pages/home_page/pain_events_tabs/pain_events_tab.dart';
-import 'package:bobobidou/pages/home_page/section_card.dart';
-import 'package:bobobidou/pages/home_page/section_title.dart';
-import 'package:bobobidou/pages/language_settings_page.dart';
-import 'package:bobobidou/pages/profile_page.dart';
-import 'package:bobobidou/pages/widgets/export_button.dart';
-import 'package:bobobidou/pages/widgets/ingredients_input.dart';
+import 'package:bobobidou/pages/analysis_page/analysis_page.dart';
+import 'package:bobobidou/pages/journal/journal_page.dart';
+import 'package:bobobidou/pages/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../models/meal.dart';
-import '../../models/pain_event.dart';
-import '../../providers/meals_provider.dart';
-import '../../providers/pain_provider.dart';
-import '../analysis_page/analysis_page.dart';
-import 'package:intl/intl.dart';
-import '../theme_settings_page.dart'; // Add this import
 
+/// App shell: three destinations in a bottom navigation bar.
+/// Journal (log and review), Analysis (correlations), Settings (account,
+/// appearance, language, data).
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _HomePageState extends State<HomePage> {
+  int _index = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-
+  void _select(int index) => setState(() => _index = index);
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
+    // Pages are rebuilt when selected so the analysis always reflects the
+    // latest entries.
+    final page = switch (_index) {
+      1 => AnalysisPage(onStartLogging: () => _select(0)),
+      2 => const SettingsPage(),
+      _ => const JournalPage(),
+    };
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
-            AppLocalizations.of(context).translate("app_title"),
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).appBarTheme.foregroundColor,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: KeyedSubtree(key: ValueKey(_index), child: page),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _index,
+        onDestinationSelected: _select,
+        destinations: [
+          NavigationDestination(
+            icon: const Icon(Icons.menu_book_outlined),
+            selectedIcon: const Icon(Icons.menu_book_rounded),
+            label: localizations.translate('nav_journal'),
           ),
-
-        ),
-
-        actions: [
-          ExportButton(),
-          IconButton(
-            icon: Icon(
-              Icons.color_lens,
-              color: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-            tooltip: AppLocalizations.of(context).translate('theme_settings'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ThemeSettingsPage()),
-              );
-            },
+          NavigationDestination(
+            icon: const Icon(Icons.insights_outlined),
+            selectedIcon: const Icon(Icons.insights_rounded),
+            label: localizations.translate('nav_analysis'),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.language,
-              color: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-            tooltip: AppLocalizations.of(context).translate('language'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const LanguageSettingsPage()),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.account_circle,
-              color: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-            tooltip: AppLocalizations.of(context).translate('profile'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfilePage()),
-              );
-            },
+          NavigationDestination(
+            icon: const Icon(Icons.person_outline_rounded),
+            selectedIcon: const Icon(Icons.person_rounded),
+            label: localizations.translate('nav_settings'),
           ),
         ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Theme.of(context).colorScheme.onPrimary,
-          indicatorWeight: 3,
-          labelColor: Theme.of(context).colorScheme.onPrimary,
-          unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
-          tabs: [
-            Tab(
-              icon: const Icon(Icons.restaurant),
-              text: AppLocalizations.of(context).translate("meals_tab"),
-            ),
-            Tab(
-              icon: const Icon(Icons.healing),
-              text: AppLocalizations.of(context).translate("pain_tab"),
-            ),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // Meals Tab
-          MealsTab(),
-
-          // Pain Events Tab
-          PainEventsTab()
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        elevation: 2,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AnalysisPage()),
-          );
-        },
-        child: const Icon(Icons.insights),
       ),
     );
   }
-
 }

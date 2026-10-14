@@ -1,6 +1,7 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/pages/camera_page.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
+import 'package:bobobidou/theme/bobo_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -85,7 +86,6 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context).translate('auth_required')),
-            backgroundColor: Colors.red,
           ),
         );
         return;
@@ -104,128 +104,83 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Get theme colors
-    final primaryColor = Theme.of(context).primaryColor;
-    final primaryLightColor = Theme.of(context).colorScheme.primary.withOpacity(0.08);
-    final borderColor = Colors.grey[300];
-    final hintColor = Theme.of(context).hintColor;
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: borderColor ?? Colors.grey[300]!),
-            borderRadius: BorderRadius.circular(8),
+        Padding(
+          padding: const EdgeInsets.only(left: BoboSpace.xs, bottom: BoboSpace.sm),
+          child: Text(
+            localizations.translate('what_did_you_eat'),
+            style: theme.textTheme.titleSmall,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.food_bank, color: primaryColor),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        focusNode: _focusNode,
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context).translate('add_ingredient'),
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: hintColor),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                          isDense: true,
-                        ),
-                        onSubmitted: (value) {
-                          _addIngredient(value);
-                          _focusNode.requestFocus();
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add_circle, color: primaryColor),
-                      onPressed: () {
-                        _addIngredient(_controller.text);
-                        _focusNode.requestFocus();
-                      },
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                    const SizedBox(width: 8),
-                    // Camera button for taking pictures
-                    IconButton(
-                      icon: Icon(Icons.camera_alt, color: primaryColor),
-                      onPressed: _openCamera,
-                      tooltip: AppLocalizations.of(context).translate('take_photo_for_ingredients'),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                  ],
-                ),
-              ),
-              if (_ingredients.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: _ingredients.map((ingredient) {
-                      return Chip(
-                        label: Text(
-                          ingredient,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black87,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        backgroundColor: primaryLightColor,
-                        deleteIconColor: primaryColor.withOpacity(0.7),
-                        onDeleted: () => _removeIngredient(ingredient),
-                        visualDensity: VisualDensity.compact,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        shape: StadiumBorder(
-                          side: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                      );
-                    }).toList(),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                textCapitalization: TextCapitalization.sentences,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  hintText: localizations.translate('add_ingredient'),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.add_circle_rounded),
+                    color: theme.colorScheme.onPrimaryContainer,
+                    tooltip: localizations.translate('add'),
+                    onPressed: () {
+                      _addIngredient(_controller.text);
+                      _focusNode.requestFocus();
+                    },
                   ),
                 ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.only(left: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context).translate('add_separately'),
-                  style: TextStyle(color: hintColor, fontSize: 12),
-                ),
+                onSubmitted: (value) {
+                  _addIngredient(value);
+                  _focusNode.requestFocus();
+                },
               ),
-              /*Text(
-                AppLocalizations.of(context).translate('or_take_photo'),
-                style: TextStyle(color: hintColor, fontSize: 12),
+            ),
+            const SizedBox(width: BoboSpace.sm),
+            // Camera button: detect the ingredients from a photo
+            IconButton.filledTonal(
+              icon: const Icon(Icons.photo_camera_rounded),
+              iconSize: 26,
+              style: IconButton.styleFrom(
+                backgroundColor: theme.colorScheme.primaryContainer,
+                foregroundColor: theme.colorScheme.onPrimaryContainer,
+                fixedSize: const Size(52, 52),
+                shape: const RoundedRectangleBorder(borderRadius: BoboRadius.mdAll),
               ),
-              const SizedBox(width: 4),
-              Icon(
-                Icons.camera_alt,
-                color: hintColor,
-                size: 12,
-              ),*/
-            ],
-          ),
+              onPressed: _openCamera,
+              tooltip: localizations.translate('take_photo_for_ingredients'),
+            ),
+          ],
         ),
+        const SizedBox(height: BoboSpace.sm),
+        if (_ingredients.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: BoboSpace.xs),
+            child: Text(
+              localizations.translate('add_separately'),
+              style: theme.textTheme.bodySmall,
+            ),
+          )
+        else
+          Wrap(
+            spacing: BoboSpace.sm,
+            runSpacing: BoboSpace.sm,
+            children: _ingredients.map((ingredient) {
+              return Chip(
+                label: Text(ingredient),
+                onDeleted: () => _removeIngredient(ingredient),
+                deleteIcon: const Icon(Icons.close_rounded, size: 18),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              );
+            }).toList(),
+          ),
       ],
     );
   }

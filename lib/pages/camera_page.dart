@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/services/food_recognition_service.dart';
+import 'package:bobobidou/theme/bobo_tokens.dart';
 
 class CameraPage extends StatefulWidget {
   final Function(List<String>) onIngredientsDetected;
@@ -83,9 +84,7 @@ class _CameraPageState extends State<CameraPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
-            ),
+            const CircularProgressIndicator(),
             const SizedBox(height: 16),
             Text(AppLocalizations.of(context).translate('analyzing_image')),
           ],
@@ -129,7 +128,6 @@ class _CameraPageState extends State<CameraPage> {
         content: Text(
           AppLocalizations.of(context).translate('ingredient_detection_error'),
         ),
-        backgroundColor: Colors.red,
       ),
     );
   }
@@ -143,50 +141,47 @@ class _CameraPageState extends State<CameraPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('take_photo')),
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: _imageFile == null
-          ? Center(
-        child: CircularProgressIndicator(
-          color: Theme.of(context).primaryColor,
-        ),
-      )
+          ? const Center(child: CircularProgressIndicator())
           : Column(
         children: [
           Expanded(
-            child: Center(
-              child: Image.file(
-                _imageFile!,
-                fit: BoxFit.contain,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: BoboSpace.page),
+              child: ClipRRect(
+                borderRadius: BoboRadius.lgAll,
+                child: Image.file(
+                  _imageFile!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
           ),
-          Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.refresh),
-                  label: Text(AppLocalizations.of(context).translate('retake')),
-                  onPressed: _isProcessing ? null : _retakePicture,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
-                    foregroundColor: Colors.black87,
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(BoboSpace.page),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.refresh_rounded),
+                      label: Text(AppLocalizations.of(context).translate('retake')),
+                      onPressed: _isProcessing ? null : _retakePicture,
+                    ),
                   ),
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.check),
-                  label: Text(AppLocalizations.of(context).translate('use_photo')),
-                  onPressed: _isProcessing ? null : _analyzePicture,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  const SizedBox(width: BoboSpace.md),
+                  Expanded(
+                    child: FilledButton.icon(
+                      icon: const Icon(Icons.check_rounded),
+                      label: Text(AppLocalizations.of(context).translate('use_photo')),
+                      onPressed: _isProcessing ? null : _analyzePicture,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

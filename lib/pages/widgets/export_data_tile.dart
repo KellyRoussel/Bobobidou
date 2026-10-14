@@ -8,19 +8,18 @@ import '../../services/csv_export_service.dart';
 /// system "Save as" dialog (Downloads, Drive...).
 /// No storage permission is needed: Google Play rejects apps requesting
 /// MANAGE_EXTERNAL_STORAGE for this kind of use.
-class ExportButton extends StatelessWidget {
-  const ExportButton({super.key});
+class ExportDataTile extends StatelessWidget {
+  const ExportDataTile({super.key});
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    return IconButton(
-      onPressed: () => _exportData(context),
-      icon: Icon(
-        Icons.file_download,
-        color: Theme.of(context).appBarTheme.foregroundColor,
-      ),
-      tooltip: localizations.translate('export_tooltip'),
+    return ListTile(
+      onTap: () => _exportData(context),
+      leading: const Icon(Icons.file_download_outlined),
+      title: Text(localizations.translate('export_tooltip')),
+      subtitle: Text(localizations.translate('export_subtitle')),
+      trailing: const Icon(Icons.chevron_right_rounded),
     );
   }
 
