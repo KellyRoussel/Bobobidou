@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'dart:math' as math;
 
 import '../../l10n/app_localizations.dart';
+import '../../theme/bobo_tokens.dart';
 import '../../providers/analysis_provider.dart';
 import 'full_screen_timeline_chart.dart';
 
@@ -38,6 +39,12 @@ class _TimelineGraphState extends State<TimelineGraph> {
   void initState() {
     super.initState();
     _loadData();
+    // Open on the most recent days, where new entries appear
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
@@ -159,25 +166,19 @@ class _TimelineGraphState extends State<TimelineGraph> {
 
   Widget _buildEmptyDataContainer(ThemeData theme, BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: BoboSpace.page, vertical: BoboSpace.sm),
+      padding: const EdgeInsets.all(BoboSpace.lg),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BoboRadius.lgAll,
+        boxShadow: BoboShadows.soft,
       ),
       child: Center(
         child: Text(
           AppLocalizations.of(context).translate("no_temporal_data"),
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey[600],
+            color: BoboColors.cacaoDoux,
           ),
         ),
       ),
@@ -187,18 +188,12 @@ class _TimelineGraphState extends State<TimelineGraph> {
   Widget _buildNormalContent(ThemeData theme, BuildContext context, Color primaryColor,
       double chartWidth, double hourWidth, double containerWidth) {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: BoboSpace.page, vertical: BoboSpace.sm),
+      padding: const EdgeInsets.all(BoboSpace.lg),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BoboRadius.lgAll,
+        boxShadow: BoboShadows.soft,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,11 +204,7 @@ class _TimelineGraphState extends State<TimelineGraph> {
               Expanded(
                 child: Text(
                   AppLocalizations.of(context).translate("temporal_patterns"),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               IconButton(
@@ -242,7 +233,7 @@ class _TimelineGraphState extends State<TimelineGraph> {
 
     // This is the key change - use a Column with specific size constraints
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -253,11 +244,7 @@ class _TimelineGraphState extends State<TimelineGraph> {
                 const SizedBox(width: 48), // to balance the icon
                 Text(
                   AppLocalizations.of(context).translate("temporal_patterns"),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -314,8 +301,8 @@ class _TimelineGraphState extends State<TimelineGraph> {
                 hourWidth: hourWidth,
                 mealEvents: mealEvents,
                 painEvents: painEvents,
-                mealColor: primaryColor,
-                painColor: Colors.red,
+                mealColor: BoboColors.repas,
+                painColor: BoboColors.douleur,
                 startDate: startDate,
                 endDate: endDate,
               ),
@@ -333,8 +320,8 @@ class _TimelineGraphState extends State<TimelineGraph> {
         hourWidth: hourWidth,
         hoursCount: _totalHoursToLoad,
         startDate: startDate,
-        gridColor: Colors.grey[300]!,
-        textColor: Colors.grey[600]!,
+        gridColor: BoboColors.ligne,
+        textColor: BoboColors.cacaoDoux,
       ),
     );
   }
@@ -349,18 +336,15 @@ class _TimelineGraphState extends State<TimelineGraph> {
             Container(
               width: 12,
               height: 12,
-              decoration: BoxDecoration(
-                color: primaryColor,
+              decoration: const BoxDecoration(
+                color: BoboColors.repas,
                 shape: BoxShape.circle,
               ),
             ),
             const SizedBox(width: 4),
             Text(
               AppLocalizations.of(context).translate("meals"),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[700],
-              ),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -372,17 +356,14 @@ class _TimelineGraphState extends State<TimelineGraph> {
               width: 12,
               height: 12,
               decoration: const BoxDecoration(
-                color: Colors.red,
+                color: BoboColors.douleur,
                 shape: BoxShape.circle,
               ),
             ),
             const SizedBox(width: 4),
             Text(
               AppLocalizations.of(context).translate("pain_events"),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[700],
-              ),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -453,6 +434,7 @@ class HourlyGridPainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: timeText,
         style: TextStyle(
+          fontFamily: BoboFonts.body,
           color: textColor,
           fontSize: 10,
         ),
@@ -622,7 +604,7 @@ class TimelineEventPainter extends CustomPainter {
 
     // Horizontal dividing line
     final dividerPaint = Paint()
-      ..color = Colors.grey[300]!
+      ..color = BoboColors.ligne
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
@@ -750,7 +732,7 @@ class TimelineEventInteractionPainter extends CustomPainter {
       // If we found a meal that happened before the pain (within 6 hours), draw the connection
       if (closestMeal != null && smallestTimeGap <= 6.0) {
         final paint = Paint()
-          ..color = Colors.orange.withOpacity(0.3)
+          ..color = BoboColors.soleil.withValues(alpha: 0.6)
           ..strokeWidth = 2.0
           ..style = PaintingStyle.stroke;
 
@@ -784,7 +766,8 @@ class TimelineEventInteractionPainter extends CustomPainter {
           text: TextSpan(
             text: timeText,
             style: TextStyle(
-              color: Colors.orange[700],
+              fontFamily: BoboFonts.body,
+              color: BoboColors.cacao,
               fontSize: 10,
               fontWeight: FontWeight.bold,
             ),

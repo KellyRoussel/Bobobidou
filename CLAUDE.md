@@ -37,7 +37,7 @@ flutter pub get
 
 **Data layer:** SQLite via `sqflite`. Single singleton `DatabaseHelper.instance` in `lib/services/db_helper.dart`. Current schema version is 2 (v1→v2 migration splits comma-separated ingredients into a relational `meal_ingredients` junction table).
 
-**Navigation:** Vanilla `Navigator.push()` — no routing library. `HomePage` is the root with two tabs (Meals, Pain Events). Other screens push on top of it.
+**Navigation:** Vanilla `Navigator.push()` — no routing library. `HomePage` is the app shell with a bottom `NavigationBar`: Journal (`pages/journal/`), Analyse (`pages/analysis_page/`), Moi (`pages/settings_page.dart`). Meals and pain episodes are logged in bottom sheets (`pages/journal/log_sheets.dart`). The camera and the full-screen timeline push on top.
 
 **Backend:** `https://kellyroussel-backend.onrender.com` — Google OAuth flow and AI ingredient recognition from images. The URL is hardcoded in `auth_service.dart`, `food_recognition_service.dart`, and the warmup call in `main.dart`.
 
@@ -47,8 +47,10 @@ flutter pub get
 |------|---------|
 | `lib/models/` | Data models (`Meal`, `PainEvent`, `Ingredient`, `User`) with `fromMap()`/`toMap()` |
 | `lib/services/` | `db_helper.dart` (SQLite), `auth_service.dart` (Google OAuth), `food_recognition_service.dart` (image → ingredients) |
-| `lib/providers/` | All `ChangeNotifier` providers: meals, pain, analysis, auth, theme, locale |
-| `lib/pages/` | UI pages; `home_page/` is tab-based, `analysis_page/` contains graphs |
+| `lib/providers/` | All `ChangeNotifier` providers: meals, pain, analysis, auth, locale |
+| `lib/theme/` | Design tokens (`bobo_tokens.dart`) and `ThemeData` builder (`bobo_theme.dart`) |
+| `lib/pages/` | UI pages; `home_page/` is the shell, `journal/` the home tab, `analysis_page/` contains graphs, `widgets/` shared components (`BoboCard`, `SectionHeader`, `EntryIcon`…) |
+| `docs/design-system.md` | The Bobobidou design system (colors, type, voice) shared with communication material |
 | `lib/l10n/` | `AppLocalizations` — loads `assets/lang/en.json` or `fr.json` at runtime |
 | `assets/lang/` | Translation JSON files (keys use `snake_case`) |
 
@@ -60,6 +62,6 @@ flutter pub get
 
 **Analysis algorithm** (`lib/providers/analysis_provider.dart`): For each pain event, looks 48 hours back, counts ingredient occurrences across all meals in that window → `Map<String, int>` of ingredient involvement scores. Temporal data is filtered to last 14 days.
 
-**Theme:** 4 built-in themes (Purple, Green, Blue, LogoInspired). Theme state is in-memory only — not persisted across restarts.
+**Theme / design system:** See `docs/design-system.md`. Never hard-code colors, radii or text styles in widgets: use `BoboColors`, `BoboSpace`, `BoboRadius` and `Theme.of(context).textTheme`. Meals are always `BoboColors.repas` (coral), pain always `BoboColors.douleur` (plum). There is a single theme, `BoboTheme.light` (coral accent, no theme picker); the language is persisted in `SharedPreferences`. Fonts: Fredoka (titles) and Nunito (text), bundled in `assets/fonts/`.
 
 **Authentication flow:** User triggers camera → `AuthProvider.isAuthenticated` check → if false, OAuth dance via backend → `FlutterWebAuth2` → token stored in `SharedPreferences` → proceed with image upload.

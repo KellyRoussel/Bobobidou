@@ -1,7 +1,8 @@
 import 'package:bobobidou/config/app_config.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
-import 'package:bobobidou/providers/theme_provider.dart';
+import 'package:bobobidou/theme/bobo_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -43,17 +44,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MealsProvider()),
         ChangeNotifierProvider(create: (_) => PainProvider()),
         ChangeNotifierProvider(create: (_) => AnalysisProvider()),
-        ChangeNotifierProvider(create: (_) => AppTheme()),
       ],
-      child: Consumer<AppTheme>(
-        builder: (context, appTheme, _)
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, _)
         {
-
-          final localeProvider = Provider.of<LocaleProvider>(context);
           return MaterialApp(
             title: "Bobobidou",
-            theme: appTheme.currentTheme,
-            home: const HomePage(),
+            theme: BoboTheme.light,
+            home: const AnnotatedRegion<SystemUiOverlayStyle>(
+              // Dark status bar icons on the peach background
+              value: SystemUiOverlayStyle.dark,
+              child: HomePage(),
+            ),
             debugShowCheckedModeBanner: false,
             locale: localeProvider.locale,
             supportedLocales: const [
