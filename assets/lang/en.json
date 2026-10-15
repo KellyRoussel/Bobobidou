@@ -90,6 +90,7 @@
   "severity_high": "Very high",
   "analysis_disclaimer": "These results are leads, not a diagnosis. Talk them over with a health professional.",
   "no_correlation_yet": "No pain episode with meals in the 48 hours before it yet.",
+  "meal": "Meal",
   "meals": "Meals",
   "pain_events": "Pain episodes",
   "full_screen": "Full screen",

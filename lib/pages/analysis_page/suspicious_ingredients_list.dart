@@ -79,18 +79,29 @@ class _IngredientTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${localizations.translate("associated_with")} ${entry.value} ${localizations.translate("pain_episodes")}.",
+              "${localizations.translate("associated_with")} ${entry.value} ${localizations.translate(entry.value == 1 ? "one_pain_episode" : "pain_episodes")}.",
               style: textTheme.bodyLarge,
             ),
             const SizedBox(height: BoboSpace.lg),
-            Row(
+            // Wrap so the badge drops to the next line instead of
+            // overflowing the dialog on narrow screens.
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: BoboSpace.sm,
+              runSpacing: BoboSpace.sm,
               children: [
-                Text(localizations.translate("correlation_score"), style: textTheme.titleSmall),
-                Text(
-                  '${(ratio * 100).toStringAsFixed(0)} %',
-                  style: textTheme.titleSmall!.copyWith(color: severity.text),
+                Text.rich(
+                  TextSpan(
+                    text: localizations.translate("correlation_score"),
+                    style: textTheme.titleSmall,
+                    children: [
+                      TextSpan(
+                        text: '${(ratio * 100).toStringAsFixed(0)} %',
+                        style: textTheme.titleSmall!.copyWith(color: severity.text),
+                      ),
+                    ],
+                  ),
                 ),
-                const Spacer(),
                 _SeverityBadge(severity),
               ],
             ),

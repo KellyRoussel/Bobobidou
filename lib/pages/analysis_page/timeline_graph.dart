@@ -539,33 +539,26 @@ class TimelineEventChart extends StatelessWidget {
   }
 
   void _showEventDetails(BuildContext context, ChartDataPoint event) {
+    final localizations = AppLocalizations.of(context);
     final bool isMeal = mealEvents.contains(event);
-    final eventType = isMeal
-        ? AppLocalizations.of(context).translate("meal")
-        : AppLocalizations.of(context).translate("pain_event");
+    final eventType = localizations.translate(isMeal ? "meal" : "pain_episode");
 
-    final time = '${event.time.day}/${event.time.month} ${event.time.hour}:${event.time.minute.toString().padLeft(2, '0')}';
-    final intensity = event.intensity.toStringAsFixed(1);
+    final date = '${event.time.day.toString().padLeft(2, '0')}/${event.time.month.toString().padLeft(2, '0')}';
+    final hour = '${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}';
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(eventType),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('${AppLocalizations.of(context).translate("time")}: $time'),
-              Text('${AppLocalizations.of(context).translate("intensity")}: $intensity'),
-              if (event.details.isNotEmpty)
-                Text('${AppLocalizations.of(context).translate("details")}: ${event.details}'),
-            ],
+          content: Text(
+            '$date · $hour',
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(AppLocalizations.of(context).translate("close")),
+              child: Text(localizations.translate("close")),
             ),
           ],
         );

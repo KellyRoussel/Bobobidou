@@ -90,6 +90,7 @@
   "severity_high": "Très élevé",
   "analysis_disclaimer": "Ces résultats sont des pistes, pas un diagnostic. Parlez-en à un professionnel de santé.",
   "no_correlation_yet": "Aucune douleur précédée d’un repas dans les 48 heures pour l’instant.",
+  "meal": "Repas",
   "meals": "Repas",
   "pain_events": "Épisodes de douleur",
   "full_screen": "Plein écran",
