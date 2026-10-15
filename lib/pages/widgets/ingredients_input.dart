@@ -10,10 +10,10 @@ class IngredientInputWidget extends StatefulWidget {
   final Function(List<String>) onIngredientsChanged;
 
   const IngredientInputWidget({
-    Key? key,
+    super.key,
     this.initialIngredients = const [],
     required this.onIngredientsChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<IngredientInputWidget> createState() => _IngredientInputWidgetState();

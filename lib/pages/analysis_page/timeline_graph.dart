@@ -1,7 +1,5 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/bobo_tokens.dart';
@@ -24,10 +22,8 @@ class _TimelineGraphState extends State<TimelineGraph> {
 
   // Controls for the scrollable view
   final ScrollController _scrollController = ScrollController();
-  bool _isFullScreen = false;
+  final bool _isFullScreen = false;
 
-  // Number of hours to show in the default view
-  final int _visibleHours = 72; // 3 days
   // Total hours to load
   final int _totalHoursToLoad = 168; // 7 days
 
@@ -113,6 +109,8 @@ class _TimelineGraphState extends State<TimelineGraph> {
     // Enter immersive mode
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
+    if (!mounted) return;
+
     // Navigate to full screen chart page
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -150,13 +148,10 @@ class _TimelineGraphState extends State<TimelineGraph> {
     final hourWidth = 20.0;
     final chartWidth = _totalHoursToLoad * hourWidth;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (_isFullScreen) {
-          _toggleFullScreen();
-          return false;
-        }
-        return true;
+    return PopScope(
+      canPop: !_isFullScreen,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _toggleFullScreen();
       },
       child: _isFullScreen
           ? _buildFullScreenContent(theme, context, primaryColor, chartWidth, hourWidth)
@@ -228,9 +223,6 @@ class _TimelineGraphState extends State<TimelineGraph> {
 
   Widget _buildFullScreenContent(ThemeData theme, BuildContext context, Color primaryColor,
       double chartWidth, double hourWidth) {
-    final fullscreenWidth = MediaQuery.of(context).size.width;
-    final fullscreenHeight = MediaQuery.of(context).size.height;
-
     // This is the key change - use a Column with specific size constraints
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -505,9 +497,6 @@ class TimelineEventChart extends StatelessWidget {
 
   void _handleTap(BuildContext context, TapDownDetails details) {
     final tapPosition = details.localPosition;
-    final hourAtTap = tapPosition.dx / hourWidth;
-    final tappedTime = startDate.add(Duration(hours: hourAtTap.floor()));
-
     // Check if tap is on a meal or pain event
     ChartDataPoint? tappedEvent = _findEventAtPosition(tapPosition);
 

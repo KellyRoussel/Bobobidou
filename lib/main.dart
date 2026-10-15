@@ -23,17 +23,17 @@ Future<void> main() async {
 
 Future<void> warmUpBackend() async {
   try {
-    print("=========> Warming up");
+    debugPrint("=========> Warming up");
     final response = await http.get(Uri.parse('${AppConfig.backendUrl}/health'));
-    print('=========> ✅ Backend warmup request status: ${response.statusCode}');
+    debugPrint('=========> ✅ Backend warmup request status: ${response.statusCode}');
   } catch (e) {
-    print('❌ Backend warmup request failed: $e');
+    debugPrint('❌ Backend warmup request failed: $e');
     // No need to handle the error, just log it
   }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
