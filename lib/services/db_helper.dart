@@ -21,9 +21,6 @@ class DatabaseHelper {
     final path = join(dbPath, filePath);
     return await openDatabase(
       path,
-      // Keep 2: existing installs are on v2, and a lower number would make
-      // sqflite refuse to open them. Any future schema change needs a bump
-      // and a migration in onUpgrade.
       version: 2,
       onCreate: _createDB,
     );
