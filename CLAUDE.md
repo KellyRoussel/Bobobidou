@@ -35,7 +35,7 @@ flutter pub get
 
 **State management:** Provider (`ChangeNotifier` + `MultiProvider`). All providers are registered in `lib/main.dart`. Business logic lives in providers; pages consume them via `context.watch<>()` / `context.read<>()`.
 
-**Data layer:** SQLite via `sqflite`. Single singleton `DatabaseHelper.instance` in `lib/services/db_helper.dart`. Current schema version is 2 (v1→v2 migration splits comma-separated ingredients into a relational `meal_ingredients` junction table).
+**Data layer:** SQLite via `sqflite`. Single singleton `DatabaseHelper.instance` in `lib/services/db_helper.dart`. Current schema version is 2 (`meals`, `painEvents`, `ingredients` and the `meal_ingredients` junction table), created by `_createDB`. There is no `onUpgrade`: the old v1→v2 migration was removed before the public release since no real user had a v1 database. Never lower the version; once the app has real users, any schema change must bump it and add a migration in `onUpgrade`.
 
 **Navigation:** Vanilla `Navigator.push()` — no routing library. `HomePage` is the app shell with a bottom `NavigationBar`: Journal (`pages/journal/`), Analyse (`pages/analysis_page/`), Moi (`pages/settings_page.dart`). Meals and pain episodes are logged in bottom sheets (`pages/journal/log_sheets.dart`). The camera and the full-screen timeline push on top.
 

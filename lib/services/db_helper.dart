@@ -21,103 +21,12 @@ class DatabaseHelper {
     final path = join(dbPath, filePath);
     return await openDatabase(
       path,
-      version: 2,  // Increment version number for the new schema
+      // Keep 2: existing installs are on v2, and a lower number would make
+      // sqflite refuse to open them. Any future schema change needs a bump
+      // and a migration in onUpgrade.
+      version: 2,
       onCreate: _createDB,
-      onUpgrade: _upgradeDB,
     );
-  }
-
-  // Handle database schema upgrades
-  Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      print("UPGRADING FROM V1 TO V2");
-      // Upgrading from version 1 to 2
-
-      // Step 1: Get all meals with their ingredients before we change the schema
-      final List<Map<String, dynamic>> oldMeals = await db.query('meals');
-      List<Meal> mealsWithIngredients = [];
-
-      for (var mealMap in oldMeals) {
-        // Convert each meal map to a OldMeal object
-        OldMeal meal = OldMeal.fromMap(mealMap);
-        // Store the meal with its ingredients for later use
-        mealsWithIngredients.add(Meal(
-          id: meal.id,
-          dateTime: meal.dateTime,
-          ingredients: meal.ingredients,
-        ));
-      }
-
-      // Step 2: Create the new tables
-      await db.execute('''
-        CREATE TABLE ingredients(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT UNIQUE
-        )
-      ''');
-
-      await db.execute('''
-        CREATE TABLE meal_ingredients(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          meal_id INTEGER,
-          ingredient_id INTEGER,
-          FOREIGN KEY (meal_id) REFERENCES meals (id) ON DELETE CASCADE,
-          FOREIGN KEY (ingredient_id) REFERENCES ingredients (id) ON DELETE CASCADE
-        )
-      ''');
-
-      // Step 3: Create a temporary meals table with the new schema
-      await db.execute('''
-        CREATE TABLE meals_new(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          dateTime TEXT
-        )
-      ''');
-
-      // Step 4: Copy data from old meals table to new one
-      await db.execute('''
-        INSERT INTO meals_new (id, dateTime)
-        SELECT id, dateTime FROM meals
-      ''');
-
-      // Step 5: Drop the old meals table
-      await db.execute('DROP TABLE meals');
-
-      // Step 6: Rename the new meals table
-      await db.execute('ALTER TABLE meals_new RENAME TO meals');
-
-      // Step 7: Populate the ingredients table and create meal-ingredient relationships
-      for (var mealWithIngredients in mealsWithIngredients) {
-        for (var ingredientName in mealWithIngredients.ingredients) {
-          String trimmedName = ingredientName.trim();
-          if (trimmedName.isEmpty) continue;
-
-          // Insert ingredient if it doesn't exist
-          await db.execute(
-              'INSERT OR IGNORE INTO ingredients (name) VALUES (?)',
-              [trimmedName]
-          );
-
-          // Get the ingredient ID
-          final List<Map<String, dynamic>> ingredientMaps = await db.query(
-              'ingredients',
-              where: 'name = ?',
-              whereArgs: [trimmedName],
-              limit: 1
-          );
-
-          if (ingredientMaps.isNotEmpty) {
-            int ingredientId = ingredientMaps.first['id'] as int;
-
-            // Create relationship in junction table
-            await db.insert('meal_ingredients', {
-              'meal_id': mealWithIngredients.id,
-              'ingredient_id': ingredientId
-            });
-          }
-        }
-      }
-    }
   }
 
   // Initial database creation
