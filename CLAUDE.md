@@ -47,7 +47,7 @@ flutter pub get
 |------|---------|
 | `lib/models/` | Data models (`Meal`, `PainEvent`, `Ingredient`, `User`) with `fromMap()`/`toMap()` |
 | `lib/services/` | `db_helper.dart` (SQLite), `auth_service.dart` (Google OAuth), `food_recognition_service.dart` (image → ingredients) |
-| `lib/providers/` | All `ChangeNotifier` providers: meals, pain, analysis, auth, theme, locale |
+| `lib/providers/` | All `ChangeNotifier` providers: meals, pain, analysis, auth, locale |
 | `lib/theme/` | Design tokens (`bobo_tokens.dart`) and `ThemeData` builder (`bobo_theme.dart`) |
 | `lib/pages/` | UI pages; `home_page/` is the shell, `journal/` the home tab, `analysis_page/` contains graphs, `widgets/` shared components (`BoboCard`, `SectionHeader`, `EntryIcon`…) |
 | `docs/design-system.md` | The Bobobidou design system (colors, type, voice) shared with communication material |
@@ -62,6 +62,6 @@ flutter pub get
 
 **Analysis algorithm** (`lib/providers/analysis_provider.dart`): For each pain event, looks 48 hours back, counts ingredient occurrences across all meals in that window → `Map<String, int>` of ingredient involvement scores. Temporal data is filtered to last 14 days.
 
-**Theme / design system:** See `docs/design-system.md`. Never hard-code colors, radii or text styles in widgets: use `BoboColors`, `BoboSpace`, `BoboRadius` and `Theme.of(context).textTheme`. Meals are always `BoboColors.repas` (coral), pain always `BoboColors.douleur` (plum). The user picks one of 4 accents (`BoboAccent`: Bobobidou coral by default, Violet, Vert, Bleu); accent and language are persisted in `SharedPreferences`. Fonts: Fredoka (titles) and Nunito (text), bundled in `assets/fonts/`.
+**Theme / design system:** See `docs/design-system.md`. Never hard-code colors, radii or text styles in widgets: use `BoboColors`, `BoboSpace`, `BoboRadius` and `Theme.of(context).textTheme`. Meals are always `BoboColors.repas` (coral), pain always `BoboColors.douleur` (plum). There is a single theme, `BoboTheme.light` (coral accent, no theme picker); the language is persisted in `SharedPreferences`. Fonts: Fredoka (titles) and Nunito (text), bundled in `assets/fonts/`.
 
 **Authentication flow:** User triggers camera → `AuthProvider.isAuthenticated` check → if false, OAuth dance via backend → `FlutterWebAuth2` → token stored in `SharedPreferences` → proceed with image upload.

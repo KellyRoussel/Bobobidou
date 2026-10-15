@@ -15,7 +15,7 @@ wave and a few citrus fruits.
 
 | Token | Hex | Use |
 |---|---|---|
-| `corail` | `#E07A7A` | Brand color (default accent). Filled buttons, selected states, **meals**. |
+| `corail` | `#E07A7A` | Brand color, the only accent. Filled buttons, selected states, **meals**. |
 | `corailProfond` | `#A13F47` | Coral for text and icons on light grounds (5.7:1 on peach). |
 | `corailTendre` | `#F9DAD6` | Meal tiles, chips, navigation indicator. |
 | `peche` | `#FFF0E5` | App background. |
@@ -36,8 +36,7 @@ Rules:
   (Faible / Modéré / Élevé / Très élevé).
 - White on `corail` is 2.9:1: keep it for bold labels of 15px and more
   (buttons). For smaller text use `cacao` or `corailProfond`.
-- The accent can be changed by the user (Violet, Vert, Bleu); the peach
-  background, neutrals and meal/pain colors never change.
+- Coral is the only accent: there is no theme choice in the app.
 
 ## Typography
 
@@ -78,4 +77,4 @@ Three destinations in a bottom navigation bar:
    bottom sheet, last-7-days summary, entries grouped by day.
 2. **Analyse** — ingredients most often eaten before pain, the timeline, the
    searchable list of every ingredient.
-3. **Moi** — Google account, accent, language, CSV export.
+3. **Moi** — Google account, language, CSV export.

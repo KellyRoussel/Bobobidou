@@ -2,62 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'bobo_tokens.dart';
 
-/// An accent the user can pick in the settings. Only the accent changes:
-/// the peach background, the neutrals and the meal/pain colors stay the
-/// same so the app keeps its identity whatever the choice.
-enum BoboAccent {
-  bobobidou(
-    labelKey: 'logo_theme',
-    fill: BoboColors.corail,
-    deep: BoboColors.corailProfond,
-    tint: BoboColors.corailTendre,
-  ),
-  violet(
-    labelKey: 'purple_theme',
-    fill: Color(0xFF6750A4),
-    deep: Color(0xFF6750A4),
-    tint: Color(0xFFEADDFF),
-  ),
-  vert(
-    labelKey: 'green_theme',
-    fill: Color(0xFF2E7D32),
-    deep: Color(0xFF2E7D32),
-    tint: Color(0xFFDCEFD8),
-  ),
-  bleu(
-    labelKey: 'blue_theme',
-    fill: Color(0xFF1565C0),
-    deep: Color(0xFF1565C0),
-    tint: Color(0xFFD9E7FA),
-  );
-
-  const BoboAccent({
-    required this.labelKey,
-    required this.fill,
-    required this.deep,
-    required this.tint,
-  });
-
-  /// Translation key of the accent's name.
-  final String labelKey;
-  /// Filled surfaces: buttons, FAB, selected chips.
-  final Color fill;
-  /// Text and icons in the accent color on light grounds.
-  final Color deep;
-  /// Light containers: navigation indicator, chips, selected rows.
-  final Color tint;
-}
-
 class BoboTheme {
   BoboTheme._();
 
-  static ThemeData build(BoboAccent accent) {
+  /// The app theme: coral on peach, as in the logo.
+  static final ThemeData light = _build();
+
+  static ThemeData _build() {
     final colorScheme = ColorScheme(
       brightness: Brightness.light,
-      primary: accent.fill,
+      primary: BoboColors.corail,
       onPrimary: Colors.white,
-      primaryContainer: accent.tint,
-      onPrimaryContainer: accent.deep,
+      primaryContainer: BoboColors.corailTendre,
+      onPrimaryContainer: BoboColors.corailProfond,
       secondary: BoboColors.lagon,
       onSecondary: Colors.white,
       secondaryContainer: BoboColors.lagonTendre,
@@ -89,7 +46,7 @@ class BoboTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      primaryColor: accent.fill,
+      primaryColor: BoboColors.corail,
       scaffoldBackgroundColor: BoboColors.peche,
       fontFamily: BoboFonts.body,
       textTheme: textTheme,
@@ -108,29 +65,29 @@ class BoboTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: BoboColors.creme,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: accent.tint,
+        indicatorColor: BoboColors.corailTendre,
         height: 72,
         elevation: 0,
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
             color: states.contains(WidgetState.selected)
-                ? accent.deep
+                ? BoboColors.corailProfond
                 : BoboColors.cacaoDoux,
           ),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => textTheme.labelMedium!.copyWith(
             color: states.contains(WidgetState.selected)
-                ? accent.deep
+                ? BoboColors.corailProfond
                 : BoboColors.cacaoDoux,
           ),
         ),
       ),
-      filledButtonTheme: FilledButtonThemeData(style: _filledStyle(accent, textTheme)),
-      elevatedButtonTheme: ElevatedButtonThemeData(style: _filledStyle(accent, textTheme)),
+      filledButtonTheme: FilledButtonThemeData(style: _filledStyle(textTheme)),
+      elevatedButtonTheme: ElevatedButtonThemeData(style: _filledStyle(textTheme)),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: accent.deep,
+          foregroundColor: BoboColors.corailProfond,
           minimumSize: const Size(64, 52),
           shape: const StadiumBorder(),
           side: const BorderSide(color: BoboColors.ligne, width: 1.5),
@@ -139,13 +96,13 @@ class BoboTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: accent.deep,
+          foregroundColor: BoboColors.corailProfond,
           shape: const StadiumBorder(),
           textStyle: textTheme.labelLarge,
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: accent.fill,
+        backgroundColor: BoboColors.corail,
         foregroundColor: Colors.white,
         elevation: 2,
         shape: const StadiumBorder(),
@@ -168,13 +125,13 @@ class BoboTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BoboRadius.mdAll,
-          borderSide: BorderSide(color: accent.fill, width: 2),
+          borderSide: BorderSide(color: BoboColors.corail, width: 2),
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: accent.tint,
+        backgroundColor: BoboColors.corailTendre,
         labelStyle: textTheme.labelLarge!.copyWith(color: BoboColors.cacao),
-        deleteIconColor: accent.deep,
+        deleteIconColor: BoboColors.corailProfond,
         side: BorderSide.none,
         shape: const StadiumBorder(),
         padding: const EdgeInsets.symmetric(horizontal: BoboSpace.sm),
@@ -186,7 +143,7 @@ class BoboTheme {
         shape: RoundedRectangleBorder(borderRadius: BoboRadius.lgAll),
       ),
       listTileTheme: ListTileThemeData(
-        iconColor: accent.deep,
+        iconColor: BoboColors.corailProfond,
         titleTextStyle: textTheme.titleMedium,
         subtitleTextStyle: textTheme.bodyMedium,
         contentPadding: const EdgeInsets.symmetric(horizontal: BoboSpace.lg),
@@ -222,13 +179,13 @@ class BoboTheme {
         style: SegmentedButton.styleFrom(
           backgroundColor: BoboColors.creme,
           foregroundColor: BoboColors.cacao,
-          selectedBackgroundColor: accent.tint,
-          selectedForegroundColor: accent.deep,
+          selectedBackgroundColor: BoboColors.corailTendre,
+          selectedForegroundColor: BoboColors.corailProfond,
           side: const BorderSide(color: BoboColors.ligne, width: 1.5),
           textStyle: textTheme.labelLarge,
         ),
       ),
-      progressIndicatorTheme: ProgressIndicatorThemeData(color: accent.fill),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: BoboColors.corail),
       datePickerTheme: const DatePickerThemeData(
         backgroundColor: BoboColors.creme,
         surfaceTintColor: Colors.transparent,
@@ -239,9 +196,9 @@ class BoboTheme {
     );
   }
 
-  static ButtonStyle _filledStyle(BoboAccent accent, TextTheme textTheme) {
+  static ButtonStyle _filledStyle(TextTheme textTheme) {
     return FilledButton.styleFrom(
-      backgroundColor: accent.fill,
+      backgroundColor: BoboColors.corail,
       foregroundColor: Colors.white,
       minimumSize: const Size(64, 52),
       shape: const StadiumBorder(),

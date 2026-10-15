@@ -5,8 +5,11 @@ flutter_launcher_icons:
   android: "launcher_icon"
   # image_path_android: "assets/icon/icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
-  # adaptive_icon_background: "assets/icon/background.png"
-  # adaptive_icon_foreground: "assets/icon/foreground.png"
+  # Adaptive icon (Android 8+): peach background, logo faded on top
+  adaptive_icon_background: "#FBD1B9"
+  adaptive_icon_foreground: "assets/icon/launcher_foreground.png"
+  # The margin is already in the image
+  adaptive_icon_foreground_inset: 0
   # adaptive_icon_monochrome: "assets/icon/monochrome.png"
 
 

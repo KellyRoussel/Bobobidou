@@ -19,19 +19,12 @@ void main() {
     expect(fr.difference(en), isEmpty, reason: 'missing in en.json');
   });
 
-  test('every accent keeps the Bobobidou background and fonts', () {
-    for (final accent in BoboAccent.values) {
-      final theme = BoboTheme.build(accent);
-      expect(theme.scaffoldBackgroundColor, BoboColors.peche);
-      expect(theme.colorScheme.primary, accent.fill);
-      expect(theme.textTheme.headlineMedium!.fontFamily, BoboFonts.display);
-      expect(theme.textTheme.bodyLarge!.fontFamily, BoboFonts.body);
-    }
-  });
-
-  test('coral stays the default accent', () {
-    expect(BoboAccent.values.first, BoboAccent.bobobidou);
-    expect(BoboAccent.bobobidou.fill, const Color(0xFFE07A7A));
+  test('the theme keeps the Bobobidou colors and fonts', () {
+    final theme = BoboTheme.light;
+    expect(theme.scaffoldBackgroundColor, BoboColors.peche);
+    expect(theme.colorScheme.primary, const Color(0xFFE07A7A));
+    expect(theme.textTheme.headlineMedium!.fontFamily, BoboFonts.display);
+    expect(theme.textTheme.bodyLarge!.fontFamily, BoboFonts.body);
   });
 
   test('severity follows the ratio to the most frequent ingredient', () {

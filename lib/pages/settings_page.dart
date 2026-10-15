@@ -2,8 +2,6 @@ import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/models/user.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
 import 'package:bobobidou/providers/locale_provider.dart';
-import 'package:bobobidou/providers/theme_provider.dart';
-import 'package:bobobidou/theme/bobo_theme.dart';
 import 'package:bobobidou/theme/bobo_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +10,8 @@ import 'widgets/bobo_card.dart';
 import 'widgets/export_data_tile.dart';
 import 'widgets/section_header.dart';
 
-/// Settings tab: the Google account used for food recognition, the app
-/// accent, the language and the data export.
+/// Settings tab: the Google account used for food recognition, the
+/// language and the data export.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -33,9 +31,6 @@ class SettingsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _AccountCard(),
-                const SizedBox(height: BoboSpace.xxl),
-                SectionHeader(localizations.translate('appearance')),
-                const _AccentPicker(),
                 const SizedBox(height: BoboSpace.xxl),
                 SectionHeader(localizations.translate('language')),
                 const _LanguagePicker(),
@@ -213,65 +208,6 @@ class _AccountCard extends StatelessWidget {
     if (confirmed == true) {
       await authProvider.logout();
     }
-  }
-}
-
-class _AccentPicker extends StatelessWidget {
-  const _AccentPicker();
-
-  @override
-  Widget build(BuildContext context) {
-    final appTheme = context.watch<AppTheme>();
-    final localizations = AppLocalizations.of(context);
-    final textTheme = Theme.of(context).textTheme;
-
-    return BoboCard(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          for (final accent in BoboAccent.values)
-            Semantics(
-              button: true,
-              selected: accent == appTheme.accent,
-              label: localizations.translate(accent.labelKey),
-              child: InkWell(
-                customBorder: const CircleBorder(),
-                onTap: () => context.read<AppTheme>().setAccent(accent),
-                child: Padding(
-                  padding: const EdgeInsets.all(BoboSpace.xs),
-                  child: Column(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: accent.fill,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: accent == appTheme.accent ? BoboColors.cacao : BoboColors.creme,
-                            width: 3,
-                          ),
-                        ),
-                        child: accent == appTheme.accent
-                            ? const Icon(Icons.check_rounded, color: Colors.white)
-                            : null,
-                      ),
-                      const SizedBox(height: BoboSpace.xs),
-                      ExcludeSemantics(
-                        child: Text(
-                          localizations.translate(accent.labelKey),
-                          style: textTheme.labelMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
   }
 }
 

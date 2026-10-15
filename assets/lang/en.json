@@ -29,9 +29,6 @@
   "language": "Language",
   "english": "English",
   "french": "French",
-  "purple_theme": "Violet",
-  "green_theme": "Green",
-  "blue_theme": "Blue",
   "take_photo": "Take a photo",
   "take_photo_for_ingredients": "Take a photo to detect ingredients",
   "analyzing_image": "Analyzing your food image...",
@@ -100,8 +97,6 @@
   "no_temporal_data": "No entries in the last 7 days",
   "retake": "Retake",
   "use_photo": "Use this photo",
-  "appearance": "Appearance",
-  "logo_theme": "Bobobidou",
   "my_data": "My data",
   "export_subtitle": "A file you can open in a spreadsheet",
   "one_pain_episode": "pain episode"
