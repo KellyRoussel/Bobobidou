@@ -100,5 +100,8 @@
   "use_photo": "Utiliser cette photo",
   "my_data": "Mes données",
   "export_subtitle": "Un fichier à ouvrir dans un tableur",
-  "one_pain_episode": "épisode de douleur"
+  "one_pain_episode": "épisode de douleur",
+  "privacy_policy": "Politique de confidentialité",
+  "privacy_policy_subtitle": "Ce que deviennent vos données",
+  "privacy_policy_open_failed": "Impossible d'ouvrir la page. Vérifiez votre connexion."
 }

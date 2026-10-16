@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bobobidou — Privacy policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <p class="lang"><a href="./" hreflang="fr">Version française</a></p>
+
+  <header>
+    <h1>Bobobidou privacy policy</h1>
+    <p class="updated">Last updated: October 16, 2026</p>
+  </header>
+
+  <section class="summary">
+    <h2>In short</h2>
+    <ul>
+      <li>Your journal (meals, ingredients, pain episodes) stays <strong>on your phone</strong>. It is never sent to our servers.</li>
+      <li>If you use food recognition, the <strong>photo of your plate</strong> is sent to our server and then to OpenAI to work out the ingredients. Our server does not keep it.</li>
+      <li>For this feature you sign in with <strong>Google</strong>: we keep your name, email address and profile picture.</li>
+      <li>No ads, no analytics, no data sold.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Who we are</h2>
+    <p>Bobobidou is an app developed by Kelly Roussel, as an individual, who is the data controller under the General Data Protection Regulation (GDPR).</p>
+    <p>Contact: <a href="mailto:kellyroussel.development@gmail.com">kellyroussel.development@gmail.com</a></p>
+  </section>
+
+  <section class="health">
+    <h2>Your health journal: only on your phone</h2>
+    <p>Meals, ingredients, pain episodes (date, time, intensity) and the analyses built from them are stored in a local database on your device. This health data is <strong>never sent</strong> to our server or to any third party by the app. Analyses are computed on the phone.</p>
+    <p>Two cases where this data can leave your phone, at your initiative:</p>
+    <ul>
+      <li><strong>CSV export</strong>: from the Me tab, you can save a file of your data wherever you choose (Downloads, Drive…). That file is then under your control.</li>
+      <li><strong>Android backup</strong>: if your device's automatic backup is turned on, Android may include the app's data in the encrypted backup of your Google account. You can turn it off in your phone settings.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Meal photos</h2>
+    <p>Food recognition is optional: you can always type your ingredients yourself.</p>
+    <p>When you use it, the photo you take or pick is sent, together with the app language, to our server. The server forwards it to the <strong>OpenAI</strong> API, which returns a list of ingredients. Our server does not keep the photo: it is not written to disk or to a database, and only the ingredient list goes back to the app.</p>
+    <p>OpenAI acts as a processor. Under its API terms, the data sent is not used to train its models and may be kept for up to 30 days, in particular to detect abuse, before being deleted. See <a href="https://openai.com/policies/privacy-policy/">OpenAI's privacy policy</a>.</p>
+    <p>Tip: only photograph your plate, with no recognizable person or document.</p>
+  </section>
+
+  <section>
+    <h2>Your Google account</h2>
+    <p>Food recognition requires signing in with Google. We only ask for the basic "email" and "profile" permissions. We receive and keep:</p>
+    <ul>
+      <li>your Google ID, email address, name and profile picture URL;</li>
+      <li>the sign-in tokens that keep you signed in.</li>
+    </ul>
+    <p>This information is only used to authenticate you and to protect the recognition service from abuse. It is also kept on your phone to show your account in the Me tab, and erased from it when you log out.</p>
+  </section>
+
+  <section>
+    <h2>Overview</h2>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Where</th><th>Why</th><th>How long</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Meals, ingredients, pain episodes</td><td>Your phone only</td><td>Keep and analyze the journal</td><td>Until you clear the app's data or uninstall it</td></tr>
+        <tr><td>Meal photos</td><td>Pass through our server, then OpenAI</td><td>Recognize ingredients</td><td>Not kept by our server; up to 30 days at OpenAI</td></tr>
+        <tr><td>Google account (ID, email, name, profile picture)</td><td>Our server and your phone</td><td>Authenticate you</td><td>As long as the account exists; erased from the phone on log-out</td></tr>
+        <tr><td>Technical logs (IP address, request time)</td><td>Our hosting provider</td><td>Security and operation</td><td>Limited period set by the provider</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Legal bases</h2>
+    <ul>
+      <li>Food recognition and account: performing the service you request by using it.</li>
+      <li>Technical logs: our legitimate interest in securing the service.</li>
+      <li>We do not process your health journal: it stays on your device, under your sole control.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hosting and processors</h2>
+    <ul>
+      <li><strong>Render</strong>: server hosting.</li>
+      <li><strong>Supabase</strong>: server database (accounts and sign-in tokens).</li>
+      <li><strong>OpenAI</strong>: meal photo analysis.</li>
+      <li><strong>Google</strong>: sign-in with your Google account.</li>
+    </ul>
+    <p>Some of these providers are based in the United States. Transfers outside the European Union rely on the European Commission's standard contractual clauses or the EU–US Data Privacy Framework.</p>
+  </section>
+
+  <section id="deletion">
+    <h2>Deleting your data</h2>
+    <ul>
+      <li><strong>Journal</strong>: erase everything by uninstalling the app, or via Settings › Apps › Bobobidou › Storage › Clear data.</li>
+      <li><strong>Session on the phone</strong>: "Log out" button in the Me tab.</li>
+      <li><strong>Account on our server</strong>: email <a href="mailto:kellyroussel.development@gmail.com?subject=Bobobidou%20-%20account%20deletion">kellyroussel.development@gmail.com</a> from your Google account address, with the subject "Bobobidou - account deletion". Your account and sign-in tokens will be deleted within 30 days and we will confirm it.</li>
+      <li>You can also remove Bobobidou's access to your Google account at <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Your rights</h2>
+    <p>You have the right to access, rectify, erase, restrict, port and object to the processing of your data. To exercise them, email <a href="mailto:kellyroussel.development@gmail.com">kellyroussel.development@gmail.com</a>. You can also lodge a complaint with your data protection authority (in France, the <a href="https://www.cnil.fr/en/">CNIL</a>).</p>
+  </section>
+
+  <section>
+    <h2>Security</h2>
+    <p>Traffic between the app and our server is encrypted (HTTPS). The recognition service can only be used with a valid sign-in token. Journal data is protected by Android's app sandboxing.</p>
+  </section>
+
+  <section>
+    <h2>Children</h2>
+    <p>Bobobidou is not intended for children under 15.</p>
+  </section>
+
+  <section>
+    <h2>Not a medical device</h2>
+    <p>Bobobidou helps you spot leads between your meals and your pain. It is not a diagnosis: talk to a health professional.</p>
+  </section>
+
+  <section>
+    <h2>Changes</h2>
+    <p>This policy may change with the app. The date at the top of the page shows the latest version; for significant changes we will let you know in the app.</p>
+  </section>
+
+  <footer>Bobobidou · <a href="mailto:kellyroussel.development@gmail.com">kellyroussel.development@gmail.com</a></footer>
+</main>
+</body>
+</html>

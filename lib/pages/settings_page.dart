@@ -1,3 +1,4 @@
+import 'package:bobobidou/config/app_config.dart';
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/models/user.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
@@ -5,13 +6,14 @@ import 'package:bobobidou/providers/locale_provider.dart';
 import 'package:bobobidou/theme/bobo_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'widgets/bobo_card.dart';
 import 'widgets/export_data_tile.dart';
 import 'widgets/section_header.dart';
 
 /// Settings tab: the Google account used for food recognition, the
-/// language and the data export.
+/// language, the data export and the privacy policy.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -38,7 +40,13 @@ class SettingsPage extends StatelessWidget {
                 SectionHeader(localizations.translate('my_data')),
                 const BoboCard(
                   padding: EdgeInsets.symmetric(vertical: BoboSpace.sm),
-                  child: ExportDataTile(),
+                  child: Column(
+                    children: [
+                      ExportDataTile(),
+                      Divider(height: 1, indent: BoboSpace.lg, endIndent: BoboSpace.lg),
+                      _PrivacyPolicyTile(),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -229,5 +237,42 @@ class _LanguagePicker extends StatelessWidget {
       onSelectionChanged: (selection) =>
           context.read<LocaleProvider>().setLocale(Locale(selection.first, '')),
     );
+  }
+}
+
+/// Opens the privacy policy in the browser, in the app language.
+class _PrivacyPolicyTile extends StatelessWidget {
+  const _PrivacyPolicyTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return ListTile(
+      onTap: () => _open(context),
+      leading: const Icon(Icons.privacy_tip_outlined),
+      title: Text(localizations.translate('privacy_policy')),
+      subtitle: Text(localizations.translate('privacy_policy_subtitle')),
+      trailing: const Icon(Icons.open_in_new_rounded),
+    );
+  }
+
+  Future<void> _open(BuildContext context) async {
+    final localizations = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final languageCode = context.read<LocaleProvider>().locale.languageCode;
+    var opened = false;
+    try {
+      opened = await launchUrl(
+        Uri.parse(AppConfig.privacyPolicyUrl(languageCode)),
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint('Privacy policy launch failed: $e');
+    }
+    if (!opened) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(localizations.translate('privacy_policy_open_failed'))),
+      );
+    }
   }
 }

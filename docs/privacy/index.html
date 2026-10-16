@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bobobidou — Politique de confidentialité</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <p class="lang"><a href="en.html" hreflang="en">English version</a></p>
+
+  <header>
+    <h1>Politique de confidentialité de Bobobidou</h1>
+    <p class="updated">Dernière mise à jour : 16 octobre 2026</p>
+  </header>
+
+  <section class="summary">
+    <h2>En bref</h2>
+    <ul>
+      <li>Votre journal (repas, ingrédients, douleurs) reste <strong>sur votre téléphone</strong>. Il n'est jamais envoyé sur nos serveurs.</li>
+      <li>Si vous utilisez la reconnaissance des aliments, la <strong>photo de votre assiette</strong> est envoyée à notre serveur puis à OpenAI pour en déduire les ingrédients. Elle n'est pas conservée par notre serveur.</li>
+      <li>Pour cette fonction, vous vous connectez avec <strong>Google</strong> : nous conservons votre nom, votre adresse e-mail et votre photo de profil.</li>
+      <li>Pas de publicité, pas de mesure d'audience, aucune donnée vendue.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Qui sommes-nous ?</h2>
+    <p>Bobobidou est une application développée par Kelly Roussel, à titre individuel, qui est responsable du traitement de vos données au sens du Règlement général sur la protection des données (RGPD).</p>
+    <p>Contact : <a href="mailto:kellyroussel.development@gmail.com">kellyroussel.development@gmail.com</a></p>
+  </section>
+
+  <section class="health">
+    <h2>Votre journal de santé : uniquement sur votre téléphone</h2>
+    <p>Les repas, les ingrédients, les épisodes de douleur (date, heure, intensité) et les analyses qui en découlent sont enregistrés dans une base de données locale, sur votre appareil. Ces données de santé ne sont <strong>jamais transmises</strong> à notre serveur ni à un tiers par l'application. Les analyses sont calculées sur le téléphone.</p>
+    <p>Deux cas où ces données peuvent quitter votre téléphone, à votre initiative :</p>
+    <ul>
+      <li><strong>Export CSV</strong> : depuis l'onglet Moi, vous pouvez enregistrer un fichier de vos données à l'endroit de votre choix (Téléchargements, Drive…). Ce fichier est ensuite sous votre responsabilité.</li>
+      <li><strong>Sauvegarde Android</strong> : si la sauvegarde automatique de votre appareil est activée, Android peut inclure les données de l'application dans la sauvegarde chiffrée de votre compte Google. Vous pouvez la désactiver dans les réglages de votre téléphone.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Les photos de repas</h2>
+    <p>La reconnaissance des aliments est facultative : vous pouvez toujours saisir vos ingrédients à la main.</p>
+    <p>Quand vous l'utilisez, la photo prise ou choisie est envoyée, avec la langue de l'application, à notre serveur. Celui-ci la transmet à l'API d'<strong>OpenAI</strong>, qui renvoie une liste d'ingrédients. Notre serveur ne garde pas la photo : elle n'est ni enregistrée sur disque ni en base de données, et seule la liste d'ingrédients revient dans l'application.</p>
+    <p>OpenAI agit comme sous-traitant. Selon ses conditions pour l'API, les données envoyées ne servent pas à entraîner ses modèles et peuvent être conservées jusqu'à 30 jours, notamment pour détecter les abus, avant d'être supprimées. Voir la <a href="https://openai.com/policies/privacy-policy/">politique de confidentialité d'OpenAI</a>.</p>
+    <p>Conseil : photographiez uniquement votre assiette, sans personne ni document reconnaissable.</p>
+  </section>
+
+  <section>
+    <h2>Votre compte Google</h2>
+    <p>La reconnaissance des aliments demande une connexion avec Google. Nous demandons seulement les autorisations de base « e-mail » et « profil ». Nous recevons et conservons :</p>
+    <ul>
+      <li>votre identifiant Google, votre adresse e-mail, votre nom et l'adresse de votre photo de profil ;</li>
+      <li>les jetons de connexion qui permettent de rester connecté.</li>
+    </ul>
+    <p>Ces informations servent uniquement à vous authentifier et à protéger le service de reconnaissance contre les abus. Elles sont aussi gardées sur votre téléphone pour afficher votre compte dans l'onglet Moi, et en sont effacées quand vous vous déconnectez.</p>
+  </section>
+
+  <section>
+    <h2>Récapitulatif</h2>
+    <table>
+      <thead>
+        <tr><th>Données</th><th>Où</th><th>Pourquoi</th><th>Durée</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Repas, ingrédients, douleurs</td><td>Votre téléphone uniquement</td><td>Tenir le journal et l'analyser</td><td>Jusqu'à ce que vous effaciez les données de l'application ou la désinstalliez</td></tr>
+        <tr><td>Photos de repas</td><td>Transit par notre serveur, puis OpenAI</td><td>Reconnaître les ingrédients</td><td>Non conservées par notre serveur ; jusqu'à 30 jours chez OpenAI</td></tr>
+        <tr><td>Compte Google (identifiant, e-mail, nom, photo de profil)</td><td>Notre serveur et votre téléphone</td><td>Vous authentifier</td><td>Tant que le compte existe ; effacé du téléphone à la déconnexion</td></tr>
+        <tr><td>Journaux techniques (adresse IP, date des requêtes)</td><td>Notre hébergeur</td><td>Sécurité et bon fonctionnement</td><td>Durée limitée fixée par l'hébergeur</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Bases légales</h2>
+    <ul>
+      <li>Reconnaissance des aliments et compte : l'exécution du service que vous demandez en l'utilisant.</li>
+      <li>Journaux techniques : notre intérêt légitime à sécuriser le service.</li>
+      <li>Votre journal de santé n'est pas traité par nous : il reste sur votre appareil, sous votre seul contrôle.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hébergement et sous-traitants</h2>
+    <ul>
+      <li><strong>Render</strong> : hébergement du serveur.</li>
+      <li><strong>Supabase</strong> : base de données du serveur (comptes et jetons de connexion).</li>
+      <li><strong>OpenAI</strong> : analyse des photos de repas.</li>
+      <li><strong>Google</strong> : connexion avec votre compte Google.</li>
+    </ul>
+    <p>Certains de ces prestataires sont situés aux États-Unis. Les transferts hors de l'Union européenne sont encadrés par les clauses contractuelles types de la Commission européenne ou le Data Privacy Framework UE–États-Unis.</p>
+  </section>
+
+  <section id="suppression">
+    <h2>Supprimer vos données</h2>
+    <ul>
+      <li><strong>Journal</strong> : effacez toutes les données en désinstallant l'application, ou via Réglages › Applications › Bobobidou › Stockage › Effacer les données.</li>
+      <li><strong>Session sur le téléphone</strong> : bouton « Se déconnecter » dans l'onglet Moi.</li>
+      <li><strong>Compte sur notre serveur</strong> : écrivez à <a href="mailto:kellyroussel.development@gmail.com?subject=Bobobidou%20-%20suppression%20de%20compte">kellyroussel.development@gmail.com</a> depuis l'adresse de votre compte Google, avec pour objet « Bobobidou - suppression de compte ». Votre compte et vos jetons de connexion seront supprimés sous 30 jours, et nous vous le confirmerons.</li>
+      <li>Vous pouvez aussi retirer l'accès de Bobobidou à votre compte Google sur <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Vos droits</h2>
+    <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition sur vos données. Pour les exercer, écrivez à <a href="mailto:kellyroussel.development@gmail.com">kellyroussel.development@gmail.com</a>. Vous pouvez aussi adresser une réclamation à la <a href="https://www.cnil.fr/fr/plaintes">CNIL</a>.</p>
+  </section>
+
+  <section>
+    <h2>Sécurité</h2>
+    <p>Les échanges entre l'application et notre serveur sont chiffrés (HTTPS). Le service de reconnaissance n'est accessible qu'avec un jeton de connexion valide. Les données du journal sont protégées par le cloisonnement des applications d'Android.</p>
+  </section>
+
+  <section>
+    <h2>Enfants</h2>
+    <p>Bobobidou ne s'adresse pas aux enfants de moins de 15 ans.</p>
+  </section>
+
+  <section>
+    <h2>Pas un dispositif médical</h2>
+    <p>Bobobidou vous aide à repérer des pistes entre vos repas et vos douleurs. Ce n'est pas un diagnostic : parlez-en à un professionnel de santé.</p>
+  </section>
+
+  <section>
+    <h2>Modifications</h2>
+    <p>Cette politique peut évoluer avec l'application. La date de mise à jour en haut de la page indique la dernière version ; en cas de changement important, nous vous en informerons dans l'application.</p>
+  </section>
+
+  <footer>Bobobidou · <a href="mailto:kellyroussel.development@gmail.com">kellyroussel.development@gmail.com</a></footer>
+</main>
+</body>
+</html>
