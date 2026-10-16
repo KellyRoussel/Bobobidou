@@ -26,7 +26,7 @@ class FullScreenChartPage extends StatelessWidget {
     final totalHours = 168;
     final chartWidth = totalHours * hourWidth;
 
-    final ScrollController _scrollController = ScrollController();
+    final ScrollController scrollController = ScrollController();
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -53,10 +53,10 @@ class FullScreenChartPage extends StatelessWidget {
             // Chart
             Expanded(
               child: Scrollbar(
-                controller: _scrollController,
+                controller: scrollController,
                 thumbVisibility: true,
                 child: SingleChildScrollView(
-                  controller: _scrollController,
+                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
                     width: chartWidth,

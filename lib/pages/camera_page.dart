@@ -9,9 +9,9 @@ class CameraPage extends StatefulWidget {
   final Function(List<String>) onIngredientsDetected;
 
   const CameraPage({
-    Key? key,
+    super.key,
     required this.onIngredientsDetected,
-  }) : super(key: key);
+  });
 
   @override
   State<CameraPage> createState() => _CameraPageState();

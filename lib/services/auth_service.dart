@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 
 /// Levée quand la session ne peut plus être renouvelée : l'utilisateur doit se reconnecter.
