@@ -111,6 +111,13 @@ class _AccountCard extends StatelessWidget {
           style: OutlinedButton.styleFrom(foregroundColor: BoboColors.erreur),
           onPressed: () => _confirmLogout(context),
         ),
+        const SizedBox(height: BoboSpace.sm),
+        TextButton.icon(
+          icon: const Icon(Icons.delete_forever_rounded),
+          label: Text(localizations.translate('delete_account')),
+          style: TextButton.styleFrom(foregroundColor: BoboColors.erreur),
+          onPressed: () => _confirmDeleteAccount(context),
+        ),
       ],
     );
   }
@@ -208,6 +215,40 @@ class _AccountCard extends StatelessWidget {
     if (confirmed == true) {
       await authProvider.logout();
     }
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context) async {
+    final localizations = AppLocalizations.of(context);
+    final authProvider = context.read<AuthProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(localizations.translate('delete_account')),
+        content: Text(localizations.translate('delete_account_confirmation')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(localizations.translate('cancel')),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: BoboColors.erreur),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(localizations.translate('delete')),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    final success = await authProvider.deleteAccount();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(localizations.translate(
+            success ? 'delete_account_success' : 'delete_account_failed')),
+      ),
+    );
   }
 }
 

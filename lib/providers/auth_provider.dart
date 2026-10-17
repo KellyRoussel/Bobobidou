@@ -76,4 +76,30 @@ class AuthProvider extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  /// Supprime le compte backend. Renvoie false en cas d'échec (session conservée).
+  Future<bool> deleteAccount() async {
+    _isLoading = true;
+    notifyListeners();
+
+    bool success;
+    try {
+      success = await _authService.deleteAccount();
+    } catch (e) {
+      debugPrint('Delete account error: $e');
+      success = false;
+    }
+    if (success) {
+      _isAuthenticated = false;
+      _user = null;
+    } else {
+      // La session a pu être perdue pendant le renouvellement du token
+      _isAuthenticated = await _authService.isAuthenticated();
+      if (!_isAuthenticated) _user = null;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return success;
+  }
 }

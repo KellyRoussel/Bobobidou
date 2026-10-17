@@ -147,6 +147,37 @@ class AuthService {
     await prefs.remove(_userKey);
   }
 
+  /// Supprime le compte côté backend (utilisateur et tokens du schéma bobobidou)
+  /// puis efface la session locale. Le journal stocké sur le téléphone est conservé.
+  /// Renvoie false si la suppression a échoué.
+  Future<bool> deleteAccount() async {
+    final token = await getValidToken();
+    if (token == null) return false;
+
+    var response = await _sendDeleteAccount(token);
+    // Token rejeté : on le renouvelle une fois et on réessaie
+    if (response.statusCode == 401) {
+      final newToken = await getValidToken(forceRefresh: true);
+      if (newToken == null) return false;
+      response = await _sendDeleteAccount(newToken);
+    }
+
+    // 404 : le compte n'existe déjà plus côté backend
+    if (response.statusCode == 200 || response.statusCode == 404) {
+      await logout();
+      return true;
+    }
+    debugPrint('Delete account failed (${response.statusCode}): ${response.body}');
+    return false;
+  }
+
+  Future<http.Response> _sendDeleteAccount(String token) {
+    return http.delete(
+      Uri.parse('$_baseUrl/bobobidou/account'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+  }
+
   // Démarrer le flux d'authentification Google
   Future<bool> initiateGoogleAuth(BuildContext context) async {
     try {
