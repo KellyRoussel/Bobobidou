@@ -147,7 +147,7 @@ class AuthService {
     await prefs.remove(_userKey);
   }
 
-  /// Supprime le compte côté backend (utilisateur, tokens, accès Google révoqué)
+  /// Supprime le compte côté backend (utilisateur et tokens du schéma bobobidou)
   /// puis efface la session locale. Le journal stocké sur le téléphone est conservé.
   /// Renvoie false si la suppression a échoué.
   Future<bool> deleteAccount() async {
@@ -173,7 +173,7 @@ class AuthService {
 
   Future<http.Response> _sendDeleteAccount(String token) {
     return http.delete(
-      Uri.parse('$_baseUrl/auth/account'),
+      Uri.parse('$_baseUrl/bobobidou/account'),
       headers: {'Authorization': 'Bearer $token'},
     );
   }

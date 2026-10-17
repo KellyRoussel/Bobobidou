@@ -58,7 +58,7 @@
   "logout": "Se déconnecter",
   "logout_confirmation": "Voulez-vous vraiment vous déconnecter ?",
   "delete_account": "Supprimer mon compte",
-  "delete_account_confirmation": "Votre compte Bobobidou sera définitivement supprimé et l'accès à votre compte Google révoqué. Votre compte Google n'est pas supprimé, et votre journal reste sur ce téléphone.",
+  "delete_account_confirmation": "Votre compte Bobobidou sera définitivement supprimé. Votre compte Google n'est pas supprimé, et votre journal reste sur ce téléphone.",
   "delete": "Supprimer",
   "delete_account_success": "Votre compte a été supprimé",
   "delete_account_failed": "La suppression du compte a échoué. Réessayez plus tard.",
