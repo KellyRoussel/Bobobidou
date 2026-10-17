@@ -49,6 +49,7 @@
     <p>La reconnaissance des aliments est facultative : vous pouvez toujours saisir vos ingrédients à la main.</p>
     <p>Quand vous l'utilisez, la photo prise ou choisie est envoyée, avec la langue de l'application, à notre serveur. Celui-ci la transmet à l'API d'<strong>OpenAI</strong>, qui renvoie une liste d'ingrédients. Notre serveur ne garde pas la photo : elle n'est ni enregistrée sur disque ni en base de données, et seule la liste d'ingrédients revient dans l'application.</p>
     <p>OpenAI agit comme sous-traitant. Selon ses conditions pour l'API, les données envoyées ne servent pas à entraîner ses modèles et peuvent être conservées jusqu'à 30 jours, notamment pour détecter les abus, avant d'être supprimées. Voir la <a href="https://openai.com/policies/privacy-policy/">politique de confidentialité d'OpenAI</a>.</p>
+    <p>Le nombre de photos analysées est limité par jour. Pour appliquer cette limite, notre serveur compte vos photos du jour sous une empreinte (HMAC) de votre identifiant Google, sans la photo ni son contenu. Ce compteur n'est pas rattaché à votre compte : il est gardé 7 jours, même si vous supprimez votre compte, pour que supprimer puis recréer son compte ne contourne pas la limite. Passé ce délai, il est effacé.</p>
     <p>Conseil : photographiez uniquement votre assiette, sans personne ni document reconnaissable.</p>
   </section>
 
@@ -71,6 +72,7 @@
       <tbody>
         <tr><td>Repas, ingrédients, douleurs</td><td>Votre téléphone uniquement</td><td>Tenir le journal et l'analyser</td><td>Jusqu'à ce que vous effaciez les données de l'application ou la désinstalliez</td></tr>
         <tr><td>Photos de repas</td><td>Transit par notre serveur, puis OpenAI</td><td>Reconnaître les ingrédients</td><td>Non conservées par notre serveur ; jusqu'à 30 jours chez OpenAI</td></tr>
+        <tr><td>Compteur de photos du jour (empreinte de votre identifiant, date, nombre)</td><td>Notre serveur</td><td>Limiter le nombre de photos par jour</td><td>7 jours, y compris après la suppression du compte</td></tr>
         <tr><td>Compte (e-mail, nom, photo de profil)</td><td>Notre serveur et votre téléphone</td><td>Vous authentifier</td><td>Jusqu'à la suppression du compte ; effacé du téléphone à la déconnexion</td></tr>
         <tr><td>Journaux techniques (adresse IP, date des requêtes)</td><td>Notre hébergeur</td><td>Sécurité et bon fonctionnement</td><td>Durée limitée fixée par l'hébergeur</td></tr>
       </tbody>
@@ -81,7 +83,7 @@
     <h2>Bases légales</h2>
     <ul>
       <li>Reconnaissance des aliments et compte : l'exécution du service que vous demandez en l'utilisant.</li>
-      <li>Journaux techniques : notre intérêt légitime à sécuriser le service.</li>
+      <li>Journaux techniques et compteur de photos : notre intérêt légitime à sécuriser le service et à en limiter les abus.</li>
       <li>Votre journal de santé n'est pas traité par nous : il reste sur votre appareil, sous votre seul contrôle.</li>
     </ul>
   </section>
@@ -102,7 +104,7 @@
     <ul>
       <li><strong>Journal</strong> : effacez toutes les données en désinstallant l'application, ou via Réglages › Applications › Bobobidou › Stockage › Effacer les données.</li>
       <li><strong>Session sur le téléphone</strong> : bouton « Se déconnecter » dans l'onglet Moi.</li>
-      <li><strong>Compte sur notre serveur, depuis l'application</strong> : onglet Moi › « Supprimer mon compte ». Votre compte et vos jetons de connexion sont supprimés immédiatement et définitivement ; votre journal reste sur le téléphone.</li>
+      <li><strong>Compte sur notre serveur, depuis l'application</strong> : onglet Moi › « Supprimer mon compte ». Votre compte et vos jetons de connexion sont supprimés immédiatement et définitivement ; votre journal reste sur le téléphone. Seul le compteur de photos, qui ne contient ni votre nom ni votre e-mail, est gardé jusqu'à 7 jours.</li>
       <li><strong>Compte sur notre serveur, sans l'application</strong> : rendez-vous sur <a href="https://kellyroussel-backend.onrender.com/account/delete">la page de suppression de compte</a> et connectez-vous avec le compte Google utilisé dans l'application. La suppression est immédiate, et l'accès de Bobobidou à votre compte Google est aussi révoqué.</li>
       <li>Votre compte Google lui-même n'est jamais supprimé. Vous pouvez à tout moment retirer l'accès de Bobobidou sur <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
     </ul>

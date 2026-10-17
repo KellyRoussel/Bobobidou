@@ -33,6 +33,8 @@
   "take_photo_for_ingredients": "Prendre une photo pour détecter automatiquement les ingrédients",
   "analyzing_image": "Analyse de l'image...",
   "ingredient_detection_error": "Impossible de détecter les ingrédients. Réessayez ou ajoutez-les à la main.",
+  "photo_limit_reached": "Vous avez utilisé toutes vos photos du jour. Revenez demain, ou ajoutez vos ingrédients à la main.",
+  "photo_limit_global": "La reconnaissance des aliments est très demandée aujourd'hui. Ajoutez vos ingrédients à la main, ou réessayez demain.",
   "camera_initialization_error": "Impossible de démarrer la caméra. Vérifiez les autorisations.",
   "or_take_photo": "ou prendre une photo",
   "auth_required": "Vous devez vous authentifier pour utiliser la reconnaissance automatique",
