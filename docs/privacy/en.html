@@ -15,7 +15,7 @@
 
   <header>
     <h1>Bobobidou privacy policy</h1>
-    <p class="updated">Last updated: October 16, 2026</p>
+    <p class="updated">Last updated: October 17, 2026</p>
   </header>
 
   <section class="summary">
@@ -56,8 +56,8 @@
     <h2>Your Google account</h2>
     <p>Food recognition requires signing in with Google. We only ask for the basic "email" and "profile" permissions. We receive and keep:</p>
     <ul>
-      <li>your Google ID, email address, name and profile picture URL;</li>
-      <li>the sign-in tokens that keep you signed in.</li>
+      <li>your email address, name and profile picture URL;</li>
+      <li>Bobobidou's sign-in tokens that keep you signed in. We do not keep Google access tokens.</li>
     </ul>
     <p>This information is only used to authenticate you and to protect the recognition service from abuse. It is also kept on your phone to show your account in the Me tab, and erased from it when you log out.</p>
   </section>
@@ -71,7 +71,7 @@
       <tbody>
         <tr><td>Meals, ingredients, pain episodes</td><td>Your phone only</td><td>Keep and analyze the journal</td><td>Until you clear the app's data or uninstall it</td></tr>
         <tr><td>Meal photos</td><td>Pass through our server, then OpenAI</td><td>Recognize ingredients</td><td>Not kept by our server; up to 30 days at OpenAI</td></tr>
-        <tr><td>Google account (ID, email, name, profile picture)</td><td>Our server and your phone</td><td>Authenticate you</td><td>As long as the account exists; erased from the phone on log-out</td></tr>
+        <tr><td>Account (email, name, profile picture)</td><td>Our server and your phone</td><td>Authenticate you</td><td>Until you delete the account; erased from the phone on log-out</td></tr>
         <tr><td>Technical logs (IP address, request time)</td><td>Our hosting provider</td><td>Security and operation</td><td>Limited period set by the provider</td></tr>
       </tbody>
     </table>
@@ -102,8 +102,9 @@
     <ul>
       <li><strong>Journal</strong>: erase everything by uninstalling the app, or via Settings › Apps › Bobobidou › Storage › Clear data.</li>
       <li><strong>Session on the phone</strong>: "Log out" button in the Me tab.</li>
-      <li><strong>Account on our server</strong>: email <a href="mailto:kellyroussel.development@gmail.com?subject=Bobobidou%20-%20account%20deletion">kellyroussel.development@gmail.com</a> from your Google account address, with the subject "Bobobidou - account deletion". Your account and sign-in tokens will be deleted within 30 days and we will confirm it.</li>
-      <li>You can also remove Bobobidou's access to your Google account at <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
+      <li><strong>Account on our server, from the app</strong>: Me tab › "Delete my account". Your account and sign-in tokens are deleted immediately and permanently; your journal stays on the phone.</li>
+      <li><strong>Account on our server, without the app</strong>: go to <a href="https://kellyroussel-backend.onrender.com/account/delete">the account deletion page</a> and sign in with the Google account you use in the app. Deletion is immediate, and Bobobidou's access to your Google account is revoked too.</li>
+      <li>Your Google account itself is never deleted. You can remove Bobobidou's access at any time at <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
     </ul>
   </section>
 
