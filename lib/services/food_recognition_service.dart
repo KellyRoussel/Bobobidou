@@ -5,13 +5,25 @@ import 'package:bobobidou/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
+/// Thrown when the backend refuses a photo because a daily limit is reached:
+/// the user's own limit, or the limit shared by all users ([isGlobal]).
+class PhotoLimitException implements Exception {
+  final bool isGlobal;
+
+  PhotoLimitException({required this.isGlobal});
+
+  @override
+  String toString() => 'PhotoLimitException: daily photo limit reached';
+}
+
 class FoodImageRecognitionService {
   final String apiUrlBase = '${AppConfig.backendUrl}/bobobidou/ingredients';
   final AuthService _authService = AuthService();
 
 
   /// Sends an image to the backend and returns a list of detected ingredients.
-  /// Throws [SessionExpiredException] when the user has to login again.
+  /// Throws [SessionExpiredException] when the user has to login again, and
+  /// [PhotoLimitException] when the daily photo limit is reached.
   Future<List<String>> recognizeIngredientsFromImage(File imageFile, {String language = 'en'}) async {
     final token = await _authService.getValidToken();
     if (token == null) {
@@ -40,9 +52,23 @@ class FoodImageRecognitionService {
       } else {
         throw Exception('Invalid response format from the server');
       }
+    } else if (response.statusCode == 429) {
+      throw _photoLimitException(response.body);
     } else {
       throw Exception('Failed to recognize ingredients: ${response.statusCode}');
     }
+  }
+
+  PhotoLimitException _photoLimitException(String body) {
+    try {
+      final data = json.decode(body);
+      if (data is Map<String, dynamic>) {
+        return PhotoLimitException(isGlobal: data['code'] == 'global_photo_limit');
+      }
+    } on FormatException {
+      // Not our JSON (e.g. a proxy's page): still a limit
+    }
+    return PhotoLimitException(isGlobal: false);
   }
 
   Future<http.Response> _send(File imageFile, String language, String token) async {
