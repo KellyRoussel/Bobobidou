@@ -77,4 +77,4 @@ Three destinations in a bottom navigation bar:
    bottom sheet, last-7-days summary, entries grouped by day.
 2. **Analyse** — ingredients most often eaten before pain, the timeline, the
    searchable list of every ingredient.
-3. **Moi** — Google account, language, CSV export.
+3. **Moi** — Google account, language, CSV export, privacy policy.

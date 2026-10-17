@@ -51,6 +51,7 @@ flutter pub get
 | `lib/theme/` | Design tokens (`bobo_tokens.dart`) and `ThemeData` builder (`bobo_theme.dart`) |
 | `lib/pages/` | UI pages; `home_page/` is the shell, `journal/` the home tab, `analysis_page/` contains graphs, `widgets/` shared components (`BoboCard`, `SectionHeader`, `EntryIcon`…) |
 | `docs/design-system.md` | The Bobobidou design system (colors, type, voice) shared with communication material |
+| `docs/privacy/` | Privacy policy (FR `index.html`, EN `en.html`), served by GitHub Pages at `kellyroussel.github.io/Bobobidou/privacy/` and linked from Moi. Update it whenever data collection changes |
 | `lib/l10n/` | `AppLocalizations` — loads `assets/lang/en.json` or `fr.json` at runtime |
 | `assets/lang/` | Translation JSON files (keys use `snake_case`) |
 
