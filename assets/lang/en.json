@@ -33,6 +33,8 @@
   "take_photo_for_ingredients": "Take a photo to detect ingredients",
   "analyzing_image": "Analyzing your food image...",
   "ingredient_detection_error": "Unable to detect ingredients. Please try again or add them manually.",
+  "photo_limit_reached": "You have used all your photos for today. Come back tomorrow, or add your ingredients by hand.",
+  "photo_limit_global": "Food recognition is very busy today. Add your ingredients by hand, or try again tomorrow.",
   "camera_initialization_error": "Unable to initialize camera. Please check permissions.",
   "or_take_photo": "or take a photo",
   "auth_required": "Authentication is required to use the camera",

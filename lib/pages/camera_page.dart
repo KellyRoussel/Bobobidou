@@ -106,6 +106,12 @@ class _CameraPageState extends State<CameraPage> {
       // Return the detected ingredients and go back to the previous screen
       widget.onIngredientsDetected(ingredients);
       Navigator.of(context).pop();
+    } on PhotoLimitException catch (e) {
+      if (!mounted) return;
+
+      // Close the processing dialog
+      Navigator.of(context).pop();
+      _showPhotoLimit(e);
     } catch (e) {
       debugPrint('Ingredient recognition error: $e');
       if (!mounted) return;
@@ -129,6 +135,13 @@ class _CameraPageState extends State<CameraPage> {
           AppLocalizations.of(context).translate('ingredient_detection_error'),
         ),
       ),
+    );
+  }
+
+  void _showPhotoLimit(PhotoLimitException e) {
+    final key = e.isGlobal ? 'photo_limit_global' : 'photo_limit_reached';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).translate(key))),
     );
   }
 
