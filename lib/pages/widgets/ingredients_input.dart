@@ -23,6 +23,9 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   List<String> _ingredients = [];
+  // True while the session is checked before opening the camera: renewing the
+  // token can take a while when the backend wakes up from a cold start
+  bool _isOpeningCamera = false;
 
   @override
   void initState() {
@@ -70,11 +73,25 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
   }
 
   void _openCamera() async {
+    if (_isOpeningCamera) return;
+
     // Vérifier si l'utilisateur est authentifié
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     // Renouveler le token si besoin ; si la session est perdue, on repasse par le login
-    final hasSession = await authProvider.ensureValidSession();
+    setState(() {
+      _isOpeningCamera = true;
+    });
+    final bool hasSession;
+    try {
+      hasSession = await authProvider.ensureValidSession();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isOpeningCamera = false;
+        });
+      }
+    }
     if (!mounted) return;
 
     if (!hasSession) {
@@ -146,7 +163,15 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
             const SizedBox(width: BoboSpace.sm),
             // Camera button: detect the ingredients from a photo
             IconButton.filledTonal(
-              icon: const Icon(Icons.photo_camera_rounded),
+              icon: _isOpeningCamera
+                  ? SizedBox.square(
+                      dimension: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    )
+                  : const Icon(Icons.photo_camera_rounded),
               iconSize: 26,
               style: IconButton.styleFrom(
                 backgroundColor: theme.colorScheme.primaryContainer,
@@ -154,7 +179,8 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
                 fixedSize: const Size(52, 52),
                 shape: const RoundedRectangleBorder(borderRadius: BoboRadius.mdAll),
               ),
-              onPressed: _openCamera,
+              // Not disabled while loading: it would grey out the spinner
+              onPressed: _isOpeningCamera ? () {} : _openCamera,
               tooltip: localizations.translate('take_photo_for_ingredients'),
             ),
           ],
