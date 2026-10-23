@@ -39,7 +39,7 @@ flutter pub get
 
 **Navigation:** Vanilla `Navigator.push()` — no routing library. `HomePage` is the app shell with a bottom `NavigationBar`: Journal (`pages/journal/`), Analyse (`pages/analysis_page/`), Moi (`pages/settings_page.dart`). Meals and pain episodes are logged in bottom sheets (`pages/journal/log_sheets.dart`). The camera and the full-screen timeline push on top.
 
-**Backend:** `https://kellyroussel-backend.onrender.com` — Google OAuth flow and AI ingredient recognition from images. The URL is hardcoded in `auth_service.dart`, `food_recognition_service.dart`, and the warmup call in `main.dart`.
+**Backend:** `https://bobobidou-backend-763396034125.europe-west1.run.app` (repo `KellyRoussel/bobobidou_backend`, Google Cloud Run) — Google OAuth flow, AI ingredient recognition from images and account deletion. The URL is read from `BACKEND_URL` in `assets/.env` (gitignored, see `assets/.env.example`) through `AppConfig.backendUrl`. The account deletion page linked from `docs/privacy/` is on the same host.
 
 ## Key Directories
 
