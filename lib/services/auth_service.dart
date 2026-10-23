@@ -194,18 +194,27 @@ class AuthService {
       final result = await FlutterWebAuth2.authenticate(
         url: authUrl,
         callbackUrlScheme: 'bobobidou', // Votre schéma d'URL enregistré pour le callback
+        // Android : FLAG_ACTIVITY_NO_HISTORY ferme l'onglet du navigateur au retour
+        // dans l'app, sinon il reste affiché par-dessus (ex. Samsung Internet)
+        options: const FlutterWebAuth2Options(intentFlags: 1 << 30),
       );
       // 3. Extraire le code d'autorisation de l'URL de callback
-      final code = Uri.parse(result).queryParameters['code'];
+      final callbackParams = Uri.parse(result).queryParameters;
+      final code = callbackParams['code'];
+      // Le backend vérifie le state (protection CSRF) : il faut le renvoyer
+      final state = callbackParams['state'];
 
-      
       if (code == null) {
         throw Exception('Authorization code not found');
       }
 
       // 4. Échanger le code contre un token
       final tokenResponse = await http.get(
-        Uri.parse('$_baseUrl/auth/exchange/bobobidou?code=$code&service=GOOGLE'),
+        Uri.parse('$_baseUrl/auth/exchange/bobobidou').replace(queryParameters: {
+          'code': code,
+          'service': 'GOOGLE',
+          if (state != null) 'state': state,
+        }),
       );
       
       if (tokenResponse.statusCode != 200) {
