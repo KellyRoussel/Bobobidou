@@ -49,13 +49,7 @@ flutter run
 
 ### Backend Configuration
 
-The app communicates with a backend for authentication and AI food recognition. The backend URL is currently hardcoded in three files:
-
-- `lib/main.dart`
-- `lib/services/auth_service.dart`
-- `lib/services/food_recognition_service.dart`
-
-Update the URL to point to your own backend instance before running.
+The app communicates with a backend ([bobobidou_backend](https://github.com/KellyRoussel/bobobidou_backend)) for authentication and AI food recognition. Its URL is read from `BACKEND_URL` in `assets/.env` (not committed): copy `assets/.env.example` to `assets/.env`, it points to the production backend. Change it to use your own instance.
 
 ## Useful Commands
 
