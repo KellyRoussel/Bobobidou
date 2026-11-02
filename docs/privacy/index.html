@@ -15,7 +15,7 @@
 
   <header>
     <h1>Politique de confidentialité de Bobobidou</h1>
-    <p class="updated">Dernière mise à jour : 23 octobre 2026</p>
+    <p class="updated">Dernière mise à jour : 2 novembre 2026</p>
   </header>
 
   <section class="summary">
@@ -24,6 +24,7 @@
       <li>Votre journal (repas, ingrédients, douleurs) reste <strong>sur votre téléphone</strong>. Il n'est jamais envoyé sur nos serveurs.</li>
       <li>Si vous utilisez la reconnaissance des aliments, la <strong>photo de votre assiette</strong> est envoyée à notre serveur puis à OpenAI pour en déduire les ingrédients. Elle n'est pas conservée par notre serveur.</li>
       <li>Pour cette fonction, vous vous connectez avec <strong>Google</strong> : nous conservons votre nom, votre adresse e-mail et votre photo de profil.</li>
+      <li>La reconnaissance des aliments offre 3 photos, puis demande l'abonnement <strong>Bobobidou Premium</strong>, payé via Google Play. Nous ne voyons jamais vos moyens de paiement.</li>
       <li>Pas de publicité, pas de mesure d'audience, aucune donnée vendue.</li>
     </ul>
   </section>
@@ -49,8 +50,16 @@
     <p>La reconnaissance des aliments est facultative : vous pouvez toujours saisir vos ingrédients à la main.</p>
     <p>Quand vous l'utilisez, la photo prise ou choisie est envoyée, avec la langue de l'application, à notre serveur. Celui-ci la transmet à l'API d'<strong>OpenAI</strong>, qui renvoie une liste d'ingrédients. Notre serveur ne garde pas la photo : elle n'est ni enregistrée sur disque ni en base de données, et seule la liste d'ingrédients revient dans l'application.</p>
     <p>OpenAI agit comme sous-traitant. Selon ses conditions pour l'API, les données envoyées ne servent pas à entraîner ses modèles et peuvent être conservées jusqu'à 30 jours, notamment pour détecter les abus, avant d'être supprimées. Voir la <a href="https://openai.com/policies/privacy-policy/">politique de confidentialité d'OpenAI</a>.</p>
-    <p>Le nombre de photos analysées est limité par jour. Pour appliquer cette limite, notre serveur compte vos photos du jour sous une empreinte (HMAC) de votre identifiant Google, sans la photo ni son contenu. Ce compteur n'est pas rattaché à votre compte : il est gardé 7 jours, même si vous supprimez votre compte, pour que supprimer puis recréer son compte ne contourne pas la limite. Passé ce délai, il est effacé.</p>
+    <p>Chaque personne a droit à 3 photos gratuites, une seule fois ; ensuite la reconnaissance est réservée aux abonnés, avec un nombre de photos limité par jour. Pour appliquer ces limites, notre serveur compte vos photos sous une empreinte (HMAC) de votre adresse e-mail, sans la photo ni son contenu. Ces compteurs ne sont pas rattachés à votre compte et sont gardés même si vous le supprimez, pour que supprimer puis recréer son compte ne redonne pas de photos gratuites : le compteur du jour est effacé après 7 jours, le compteur des photos gratuites 3 ans après votre dernière photo.</p>
     <p>Conseil : photographiez uniquement votre assiette, sans personne ni document reconnaissable.</p>
+  </section>
+
+  <section>
+    <h2>L'abonnement Bobobidou Premium</h2>
+    <p>L'abonnement est vendu et encaissé par <strong>Google Play</strong>, avec votre compte Google Play : Bobobidou ne reçoit ni votre carte, ni votre adresse de facturation. Il se renouvelle chaque mois et se résilie à tout moment dans Google Play (Paiements et abonnements › Abonnements), ou depuis l'onglet Moi › « Gérer mon abonnement ».</p>
+    <p>Les achats sont gérés par <strong>RevenueCat</strong>, qui vérifie auprès de Google Play qu'un abonnement est valide. RevenueCat ne reçoit ni votre nom ni votre e-mail : vous y êtes identifié par une empreinte (HMAC) de votre adresse e-mail, calculée par notre serveur. Il conserve l'historique de vos achats (produit, dates, pays, identifiants de transaction Google Play, informations techniques sur l'appareil). Voir la <a href="https://www.revenuecat.com/privacy/">politique de confidentialité de RevenueCat</a>.</p>
+    <p>Notre serveur garde, sous la même empreinte, l'état de votre abonnement (actif ou non, date de fin, renouvellement) pour décider si vos photos peuvent être analysées. Cet état n'est pas rattaché à votre compte : si vous supprimez votre compte, la période déjà payée reste utilisable si vous revenez. Il est effacé 30 jours après la fin de l'abonnement.</p>
+    <p>Supprimer votre compte <strong>résilie votre abonnement</strong> : il n'est plus renouvelé ni prélevé, et reste actif jusqu'à la fin de la période payée. Si la résiliation échoue, l'application vous le signale et vous invite à résilier dans Google Play.</p>
   </section>
 
   <section>
@@ -72,7 +81,11 @@
       <tbody>
         <tr><td>Repas, ingrédients, douleurs</td><td>Votre téléphone uniquement</td><td>Tenir le journal et l'analyser</td><td>Jusqu'à ce que vous effaciez les données de l'application ou la désinstalliez</td></tr>
         <tr><td>Photos de repas</td><td>Transit par notre serveur, puis OpenAI</td><td>Reconnaître les ingrédients</td><td>Non conservées par notre serveur ; jusqu'à 30 jours chez OpenAI</td></tr>
-        <tr><td>Compteur de photos du jour (empreinte de votre identifiant, date, nombre)</td><td>Notre serveur</td><td>Limiter le nombre de photos par jour</td><td>7 jours, y compris après la suppression du compte</td></tr>
+        <tr><td>Compteur de photos du jour (empreinte de votre e-mail, date, nombre)</td><td>Notre serveur</td><td>Limiter le nombre de photos par jour</td><td>7 jours, y compris après la suppression du compte</td></tr>
+        <tr><td>Compteur de photos gratuites (empreinte de votre e-mail, nombre, date de la dernière)</td><td>Notre serveur</td><td>N'offrir les photos gratuites qu'une fois</td><td>3 ans après la dernière photo, y compris après la suppression du compte</td></tr>
+        <tr><td>État de l'abonnement (empreinte de votre e-mail, date de fin, renouvellement)</td><td>Notre serveur</td><td>Ouvrir la reconnaissance aux abonnés</td><td>30 jours après la fin de l'abonnement</td></tr>
+        <tr><td>Historique d'achat (empreinte de votre e-mail, achats, pays, appareil)</td><td>RevenueCat</td><td>Gérer et vérifier l'abonnement</td><td>Tant que nécessaire à la gestion des achats ; supprimé sur demande</td></tr>
+        <tr><td>Paiement (moyen de paiement, facturation)</td><td>Google Play</td><td>Encaisser l'abonnement</td><td>Selon la politique de Google ; jamais transmis à Bobobidou</td></tr>
         <tr><td>Compte (e-mail, nom, photo de profil)</td><td>Notre serveur et votre téléphone</td><td>Vous authentifier</td><td>Jusqu'à la suppression du compte ; effacé du téléphone à la déconnexion</td></tr>
         <tr><td>Journaux techniques (adresse IP, date des requêtes)</td><td>Notre hébergeur</td><td>Sécurité et bon fonctionnement</td><td>Durée limitée fixée par l'hébergeur</td></tr>
       </tbody>
@@ -83,7 +96,8 @@
     <h2>Bases légales</h2>
     <ul>
       <li>Reconnaissance des aliments et compte : l'exécution du service que vous demandez en l'utilisant.</li>
-      <li>Journaux techniques et compteur de photos : notre intérêt légitime à sécuriser le service et à en limiter les abus.</li>
+      <li>Abonnement : l'exécution du contrat d'abonnement.</li>
+      <li>Journaux techniques et compteurs de photos : notre intérêt légitime à sécuriser le service, à en limiter les abus et à n'offrir les photos gratuites qu'une fois.</li>
       <li>Votre journal de santé n'est pas traité par nous : il reste sur votre appareil, sous votre seul contrôle.</li>
     </ul>
   </section>
@@ -92,9 +106,10 @@
     <h2>Hébergement et sous-traitants</h2>
     <ul>
       <li><strong>Google Cloud</strong> : hébergement du serveur (Cloud Run, en Belgique).</li>
-      <li><strong>Supabase</strong> : base de données du serveur (comptes et jetons de connexion).</li>
+      <li><strong>Supabase</strong> : base de données du serveur (comptes, jetons de connexion, compteurs et état des abonnements).</li>
       <li><strong>OpenAI</strong> : analyse des photos de repas.</li>
-      <li><strong>Google</strong> : connexion avec votre compte Google.</li>
+      <li><strong>Google</strong> : connexion avec votre compte Google, et vente de l'abonnement via Google Play.</li>
+      <li><strong>RevenueCat</strong> (États-Unis) : gestion des achats de l'abonnement.</li>
     </ul>
     <p>Certains de ces prestataires sont situés aux États-Unis. Les transferts hors de l'Union européenne sont encadrés par les clauses contractuelles types de la Commission européenne ou le Data Privacy Framework UE–États-Unis.</p>
   </section>
@@ -104,8 +119,8 @@
     <ul>
       <li><strong>Journal</strong> : effacez toutes les données en désinstallant l'application, ou via Réglages › Applications › Bobobidou › Stockage › Effacer les données.</li>
       <li><strong>Session sur le téléphone</strong> : bouton « Se déconnecter » dans l'onglet Moi.</li>
-      <li><strong>Compte sur notre serveur, depuis l'application</strong> : onglet Moi › « Supprimer mon compte ». Votre compte et vos jetons de connexion sont supprimés immédiatement et définitivement ; votre journal reste sur le téléphone. Seul le compteur de photos, qui ne contient ni votre nom ni votre e-mail, est gardé jusqu'à 7 jours.</li>
-      <li><strong>Compte sur notre serveur, sans l'application</strong> : rendez-vous sur <a href="https://bobobidou-backend-763396034125.europe-west1.run.app/account/delete">la page de suppression de compte</a> et connectez-vous avec le compte Google utilisé dans l'application. La suppression est immédiate, et l'accès de Bobobidou à votre compte Google est aussi révoqué.</li>
+      <li><strong>Compte sur notre serveur, depuis l'application</strong> : onglet Moi › « Supprimer mon compte ». Votre compte et vos jetons de connexion sont supprimés immédiatement et définitivement ; votre journal reste sur le téléphone. Votre abonnement est résilié (voir plus haut). Seuls les compteurs de photos et l'état de l'abonnement, qui ne contiennent ni votre nom ni votre e-mail, sont gardés pour les durées du récapitulatif. Pour faire effacer votre historique d'achat chez RevenueCat, écrivez-nous.</li>
+      <li><strong>Compte sur notre serveur, sans l'application</strong> : rendez-vous sur <a href="https://bobobidou-backend-763396034125.europe-west1.run.app/account/delete">la page de suppression de compte</a> et connectez-vous avec le compte Google utilisé dans l'application. La suppression est immédiate, votre abonnement est résilié, et l'accès de Bobobidou à votre compte Google est aussi révoqué.</li>
       <li>Votre compte Google lui-même n'est jamais supprimé. Vous pouvez à tout moment retirer l'accès de Bobobidou sur <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
     </ul>
   </section>

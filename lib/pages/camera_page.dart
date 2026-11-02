@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:bobobidou/l10n/app_localizations.dart';
+import 'package:bobobidou/pages/premium_page.dart';
+import 'package:bobobidou/providers/subscription_provider.dart';
 import 'package:bobobidou/services/food_recognition_service.dart';
 import 'package:bobobidou/theme/bobo_tokens.dart';
 
@@ -103,9 +106,25 @@ class _CameraPageState extends State<CameraPage> {
       // Close the processing dialog
       Navigator.of(context).pop();
 
+      // One free photo less (or one more of the day): refresh the counters
+      context.read<SubscriptionProvider>().load();
+
       // Return the detected ingredients and go back to the previous screen
       widget.onIngredientsDetected(ingredients);
       Navigator.of(context).pop();
+    } on SubscriptionRequiredException {
+      if (!mounted) return;
+
+      // Close the processing dialog
+      Navigator.of(context).pop();
+      setState(() {
+        _isProcessing = false;
+      });
+      context.read<SubscriptionProvider>().load();
+      // Free photos used up: offer Premium, and analyse this photo once subscribed
+      if (await PremiumPage.open(context) && mounted) {
+        await _analyzePicture();
+      }
     } on PhotoLimitException catch (e) {
       if (!mounted) return;
 

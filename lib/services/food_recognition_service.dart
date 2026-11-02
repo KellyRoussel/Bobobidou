@@ -16,6 +16,13 @@ class PhotoLimitException implements Exception {
   String toString() => 'PhotoLimitException: daily photo limit reached';
 }
 
+/// Thrown when the free photos are used up and the user is not subscribed (402):
+/// the app offers Bobobidou Premium.
+class SubscriptionRequiredException implements Exception {
+  @override
+  String toString() => 'SubscriptionRequiredException: free photos used up';
+}
+
 class FoodImageRecognitionService {
   final String apiUrlBase = '${AppConfig.backendUrl}/bobobidou/ingredients';
   final AuthService _authService = AuthService();
@@ -23,7 +30,8 @@ class FoodImageRecognitionService {
 
   /// Sends an image to the backend and returns a list of detected ingredients.
   /// Throws [SessionExpiredException] when the user has to login again, and
-  /// [PhotoLimitException] when the daily photo limit is reached.
+  /// [PhotoLimitException] when a daily photo limit is reached, and
+  /// [SubscriptionRequiredException] when the free photos are used up.
   Future<List<String>> recognizeIngredientsFromImage(File imageFile, {String language = 'en'}) async {
     final token = await _authService.getValidToken();
     if (token == null) {
@@ -52,6 +60,8 @@ class FoodImageRecognitionService {
       } else {
         throw Exception('Invalid response format from the server');
       }
+    } else if (response.statusCode == 402) {
+      throw SubscriptionRequiredException();
     } else if (response.statusCode == 429) {
       throw _photoLimitException(response.body);
     } else {

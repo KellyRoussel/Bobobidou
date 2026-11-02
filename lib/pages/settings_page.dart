@@ -1,8 +1,10 @@
 import 'package:bobobidou/config/app_config.dart';
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/models/user.dart';
+import 'package:bobobidou/pages/premium_page.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
 import 'package:bobobidou/providers/locale_provider.dart';
+import 'package:bobobidou/providers/subscription_provider.dart';
 import 'package:bobobidou/theme/bobo_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +14,8 @@ import 'widgets/bobo_card.dart';
 import 'widgets/export_data_tile.dart';
 import 'widgets/section_header.dart';
 
-/// Settings tab: the Google account used for food recognition, the
-/// language, the data export and the privacy policy.
+/// Settings tab: the Google account used for food recognition, the Premium
+/// subscription, the language, the data export and the privacy policy.
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -33,6 +35,11 @@ class SettingsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _AccountCard(),
+                if (context.watch<AuthProvider>().isAuthenticated) ...[
+                  const SizedBox(height: BoboSpace.xxl),
+                  SectionHeader(localizations.translate('premium_section')),
+                  const _SubscriptionCard(),
+                ],
                 const SizedBox(height: BoboSpace.xxl),
                 SectionHeader(localizations.translate('language')),
                 const _LanguagePicker(),
@@ -229,12 +236,18 @@ class _AccountCard extends StatelessWidget {
     final localizations = AppLocalizations.of(context);
     final authProvider = context.read<AuthProvider>();
     final messenger = ScaffoldMessenger.of(context);
+    final status = context.read<SubscriptionProvider>().status;
+    final subscribed = status != null && status.premium && status.willRenew;
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(localizations.translate('delete_account')),
-        content: Text(localizations.translate('delete_account_confirmation')),
+        content: Text([
+          localizations.translate('delete_account_confirmation'),
+          // The backend cancels the renewal: say it before
+          if (subscribed) localizations.translate('delete_account_subscription_warning'),
+        ].join('\n\n')),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -250,11 +263,95 @@ class _AccountCard extends StatelessWidget {
     );
     if (confirmed != true) return;
 
-    final success = await authProvider.deleteAccount();
+    final result = await authProvider.deleteAccount();
     messenger.showSnackBar(
       SnackBar(
         content: Text(localizations.translate(
-            success ? 'delete_account_success' : 'delete_account_failed')),
+            result.success ? 'delete_account_success' : 'delete_account_failed')),
+      ),
+    );
+    if (result.subscriptionCancelFailed && context.mounted) {
+      // The account is gone but Google would keep charging: send them to Google Play
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(localizations.translate('premium_section')),
+          content: Text(localizations.translate('delete_account_subscription_failed')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(localizations.translate('close')),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                openPlaySubscriptions(context);
+              },
+              child: Text(localizations.translate('premium_manage')),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}
+
+/// Premium state: free photos left, or until when the subscription runs,
+/// with the way to subscribe or to manage it in Google Play.
+class _SubscriptionCard extends StatelessWidget {
+  const _SubscriptionCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    final textTheme = Theme.of(context).textTheme;
+    final subscription = context.watch<SubscriptionProvider>();
+    final status = subscription.status;
+
+    if (status == null) {
+      return BoboCard(
+        padding: const EdgeInsets.all(BoboSpace.xl),
+        child: subscription.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Text(localizations.translate('premium_status_unavailable'), style: textTheme.bodyMedium),
+      );
+    }
+
+    return BoboCard(
+      padding: const EdgeInsets.all(BoboSpace.xl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Icon(
+                status.premium ? Icons.workspace_premium_rounded : Icons.photo_camera_outlined,
+                color: BoboColors.repas,
+              ),
+              const SizedBox(width: BoboSpace.md),
+              Expanded(
+                child: Text(
+                  status.premium
+                      ? subscriptionStateText(localizations, status.expiresAt, status.willRenew)
+                      : localizations
+                          .translate('premium_free_photos_left')
+                          .replaceAll('{left}', '${status.freePhotosLeft}')
+                          .replaceAll('{total}', '${status.freePhotosTotal}'),
+                  style: textTheme.titleMedium,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: BoboSpace.lg),
+          if (status.premium)
+            const ManageSubscriptionButton()
+          else
+            FilledButton.icon(
+              icon: const Icon(Icons.workspace_premium_rounded),
+              label: Text(localizations.translate('premium_discover')),
+              onPressed: () => PremiumPage.open(context),
+            ),
+        ],
       ),
     );
   }

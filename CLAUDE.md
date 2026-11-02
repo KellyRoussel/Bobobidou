@@ -59,15 +59,15 @@ storeFile=/absolute/path/to/bobobidou-upload.jks
 
 **Navigation:** Vanilla `Navigator.push()` — no routing library. `HomePage` is the app shell with a bottom `NavigationBar`: Journal (`pages/journal/`), Analyse (`pages/analysis_page/`), Moi (`pages/settings_page.dart`). Meals and pain episodes are logged in bottom sheets (`pages/journal/log_sheets.dart`). The camera and the full-screen timeline push on top.
 
-**Backend:** `https://bobobidou-backend-763396034125.europe-west1.run.app` (repo `KellyRoussel/bobobidou_backend`, Google Cloud Run) — Google OAuth flow, AI ingredient recognition from images and account deletion. The URL is read from `BACKEND_URL` in `assets/.env` (gitignored, see `assets/.env.example`) through `AppConfig.backendUrl`. The account deletion page linked from `docs/privacy/` is on the same host.
+**Backend:** `https://bobobidou-backend-763396034125.europe-west1.run.app` (repo `KellyRoussel/bobobidou_backend`, Google Cloud Run) — Google OAuth flow, AI ingredient recognition from images (3 free photos, then subscribers only), subscriptions and account deletion. The URL is read from `BACKEND_URL` in `assets/.env` (gitignored, see `assets/.env.example`) through `AppConfig.backendUrl`. The account deletion page linked from `docs/privacy/` is on the same host.
 
 ## Key Directories
 
 | Path | Purpose |
 |------|---------|
 | `lib/models/` | Data models (`Meal`, `PainEvent`, `Ingredient`, `User`) with `fromMap()`/`toMap()` |
-| `lib/services/` | `db_helper.dart` (SQLite), `auth_service.dart` (Google OAuth), `food_recognition_service.dart` (image → ingredients) |
-| `lib/providers/` | All `ChangeNotifier` providers: meals, pain, analysis, auth, locale |
+| `lib/services/` | `db_helper.dart` (SQLite), `auth_service.dart` (Google OAuth), `food_recognition_service.dart` (image → ingredients), `subscription_service.dart` (subscription state from the backend) |
+| `lib/providers/` | All `ChangeNotifier` providers: meals, pain, analysis, auth, locale, subscription (follows auth through a `ChangeNotifierProxyProvider`) |
 | `lib/theme/` | Design tokens (`bobo_tokens.dart`) and `ThemeData` builder (`bobo_theme.dart`) |
 | `lib/pages/` | UI pages; `home_page/` is the shell, `journal/` the home tab, `analysis_page/` contains graphs, `widgets/` shared components (`BoboCard`, `SectionHeader`, `EntryIcon`…) |
 | `docs/design-system.md` | The Bobobidou design system (colors, type, voice) shared with communication material |
@@ -84,5 +84,7 @@ storeFile=/absolute/path/to/bobobidou-upload.jks
 **Analysis algorithm** (`lib/providers/analysis_provider.dart`): For each pain event, looks 48 hours back, counts ingredient occurrences across all meals in that window → `Map<String, int>` of ingredient involvement scores. Temporal data is filtered to last 14 days.
 
 **Theme / design system:** See `docs/design-system.md`. Never hard-code colors, radii or text styles in widgets: use `BoboColors`, `BoboSpace`, `BoboRadius` and `Theme.of(context).textTheme`. Meals are always `BoboColors.repas` (coral), pain always `BoboColors.douleur` (plum). There is a single theme, `BoboTheme.light` (coral accent, no theme picker); the language is persisted in `SharedPreferences`. Fonts: Fredoka (titles) and Nunito (text), bundled in `assets/fonts/`.
+
+**Subscription (Bobobidou Premium):** only food recognition is paid. 3 free photos per person, then a monthly Google Play subscription (product `bobobidou_premium_monthly`, RevenueCat entitlement `premium`, offering `default`) bought through `purchases_flutter` in `SubscriptionProvider`; public SDK key `REVENUECAT_API_KEY` in `assets/.env` (empty: purchases disabled). The backend decides access (402 `subscription_required` → `PremiumPage`); the app shows `GET /bobobidou/subscription` and identifies the RevenueCat customer with the `app_user_id` it returns (an HMAC of the email: the subscription follows the person, not the account). After a purchase or restore, `POST /bobobidou/subscription/refresh`. Deleting the account cancels the renewal on the backend side; the Moi tab links to the Google Play subscriptions page.
 
 **Authentication flow:** User triggers camera → `AuthProvider.isAuthenticated` check → if false, OAuth dance via backend → `FlutterWebAuth2` → token stored in `SharedPreferences` → proceed with image upload.

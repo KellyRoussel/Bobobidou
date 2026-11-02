@@ -15,7 +15,7 @@
 
   <header>
     <h1>Bobobidou privacy policy</h1>
-    <p class="updated">Last updated: October 23, 2026</p>
+    <p class="updated">Last updated: November 2, 2026</p>
   </header>
 
   <section class="summary">
@@ -24,6 +24,7 @@
       <li>Your journal (meals, ingredients, pain episodes) stays <strong>on your phone</strong>. It is never sent to our servers.</li>
       <li>If you use food recognition, the <strong>photo of your plate</strong> is sent to our server and then to OpenAI to work out the ingredients. Our server does not keep it.</li>
       <li>For this feature you sign in with <strong>Google</strong>: we keep your name, email address and profile picture.</li>
+      <li>Food recognition offers 3 photos, then requires the <strong>Bobobidou Premium</strong> subscription, paid through Google Play. We never see your payment details.</li>
       <li>No ads, no analytics, no data sold.</li>
     </ul>
   </section>
@@ -49,8 +50,16 @@
     <p>Food recognition is optional: you can always type your ingredients yourself.</p>
     <p>When you use it, the photo you take or pick is sent, together with the app language, to our server. The server forwards it to the <strong>OpenAI</strong> API, which returns a list of ingredients. Our server does not keep the photo: it is not written to disk or to a database, and only the ingredient list goes back to the app.</p>
     <p>OpenAI acts as a processor. Under its API terms, the data sent is not used to train its models and may be kept for up to 30 days, in particular to detect abuse, before being deleted. See <a href="https://openai.com/policies/privacy-policy/">OpenAI's privacy policy</a>.</p>
-    <p>The number of photos analyzed per day is limited. To enforce this limit, our server counts your photos of the day under a fingerprint (HMAC) of your Google identifier, without the photo or its content. This counter is not linked to your account: it is kept for 7 days, even if you delete your account, so that deleting and recreating an account does not get around the limit. After that, it is erased.</p>
+    <p>Each person gets 3 free photos, once; after that, recognition is for subscribers, with a limited number of photos per day. To enforce these limits, our server counts your photos under a fingerprint (HMAC) of your email address, without the photo or its content. These counters are not linked to your account and are kept even if you delete it, so that deleting and recreating an account does not give new free photos: the daily counter is erased after 7 days, the free photos counter 3 years after your last photo.</p>
     <p>Tip: only photograph your plate, with no recognizable person or document.</p>
+  </section>
+
+  <section>
+    <h2>The Bobobidou Premium subscription</h2>
+    <p>The subscription is sold and charged by <strong>Google Play</strong>, with your Google Play account: Bobobidou receives neither your card nor your billing address. It renews every month and can be cancelled at any time in Google Play (Payments &amp; subscriptions › Subscriptions), or from the Me tab › "Manage my subscription".</p>
+    <p>Purchases are managed by <strong>RevenueCat</strong>, which checks with Google Play that a subscription is valid. RevenueCat receives neither your name nor your email: you are identified there by a fingerprint (HMAC) of your email address, computed by our server. It keeps your purchase history (product, dates, country, Google Play transaction identifiers, technical information about the device). See <a href="https://www.revenuecat.com/privacy/">RevenueCat's privacy policy</a>.</p>
+    <p>Our server keeps, under the same fingerprint, the state of your subscription (active or not, end date, renewal) to decide whether your photos can be analyzed. This state is not linked to your account: if you delete your account, the period already paid remains usable if you come back. It is erased 30 days after the subscription ends.</p>
+    <p>Deleting your account <strong>cancels your subscription</strong>: it is no longer renewed or charged, and stays active until the end of the paid period. If the cancellation fails, the app tells you and asks you to cancel in Google Play.</p>
   </section>
 
   <section>
@@ -72,7 +81,11 @@
       <tbody>
         <tr><td>Meals, ingredients, pain episodes</td><td>Your phone only</td><td>Keep and analyze the journal</td><td>Until you clear the app's data or uninstall it</td></tr>
         <tr><td>Meal photos</td><td>Pass through our server, then OpenAI</td><td>Recognize ingredients</td><td>Not kept by our server; up to 30 days at OpenAI</td></tr>
-        <tr><td>Daily photo counter (fingerprint of your identifier, date, count)</td><td>Our server</td><td>Limit the number of photos per day</td><td>7 days, including after account deletion</td></tr>
+        <tr><td>Daily photo counter (fingerprint of your email, date, count)</td><td>Our server</td><td>Limit the number of photos per day</td><td>7 days, including after account deletion</td></tr>
+        <tr><td>Free photos counter (fingerprint of your email, count, date of the last one)</td><td>Our server</td><td>Offer the free photos only once</td><td>3 years after the last photo, including after account deletion</td></tr>
+        <tr><td>Subscription state (fingerprint of your email, end date, renewal)</td><td>Our server</td><td>Open recognition to subscribers</td><td>30 days after the subscription ends</td></tr>
+        <tr><td>Purchase history (fingerprint of your email, purchases, country, device)</td><td>RevenueCat</td><td>Manage and check the subscription</td><td>As long as needed to manage purchases; deleted on request</td></tr>
+        <tr><td>Payment (payment method, billing)</td><td>Google Play</td><td>Charge the subscription</td><td>Under Google's policy; never shared with Bobobidou</td></tr>
         <tr><td>Account (email, name, profile picture)</td><td>Our server and your phone</td><td>Authenticate you</td><td>Until you delete the account; erased from the phone on log-out</td></tr>
         <tr><td>Technical logs (IP address, request time)</td><td>Our hosting provider</td><td>Security and operation</td><td>Limited period set by the provider</td></tr>
       </tbody>
@@ -83,7 +96,8 @@
     <h2>Legal bases</h2>
     <ul>
       <li>Food recognition and account: performing the service you request by using it.</li>
-      <li>Technical logs and photo counter: our legitimate interest in securing the service and limiting abuse.</li>
+      <li>Subscription: performance of the subscription contract.</li>
+      <li>Technical logs and photo counters: our legitimate interest in securing the service, limiting abuse and offering the free photos only once.</li>
       <li>We do not process your health journal: it stays on your device, under your sole control.</li>
     </ul>
   </section>
@@ -92,9 +106,10 @@
     <h2>Hosting and processors</h2>
     <ul>
       <li><strong>Google Cloud</strong>: server hosting (Cloud Run, in Belgium).</li>
-      <li><strong>Supabase</strong>: server database (accounts and sign-in tokens).</li>
+      <li><strong>Supabase</strong>: server database (accounts, sign-in tokens, photo counters and subscription states).</li>
       <li><strong>OpenAI</strong>: meal photo analysis.</li>
-      <li><strong>Google</strong>: sign-in with your Google account.</li>
+      <li><strong>Google</strong>: sign-in with your Google account, and sale of the subscription through Google Play.</li>
+      <li><strong>RevenueCat</strong> (United States): management of the subscription purchases.</li>
     </ul>
     <p>Some of these providers are based in the United States. Transfers outside the European Union rely on the European Commission's standard contractual clauses or the EU–US Data Privacy Framework.</p>
   </section>
@@ -104,8 +119,8 @@
     <ul>
       <li><strong>Journal</strong>: erase everything by uninstalling the app, or via Settings › Apps › Bobobidou › Storage › Clear data.</li>
       <li><strong>Session on the phone</strong>: "Log out" button in the Me tab.</li>
-      <li><strong>Account on our server, from the app</strong>: Me tab › "Delete my account". Your account and sign-in tokens are deleted immediately and permanently; your journal stays on the phone. Only the photo counter, which holds neither your name nor your email, is kept for up to 7 days.</li>
-      <li><strong>Account on our server, without the app</strong>: go to <a href="https://bobobidou-backend-763396034125.europe-west1.run.app/account/delete">the account deletion page</a> and sign in with the Google account you use in the app. Deletion is immediate, and Bobobidou's access to your Google account is revoked too.</li>
+      <li><strong>Account on our server, from the app</strong>: Me tab › "Delete my account". Your account and sign-in tokens are deleted immediately and permanently; your journal stays on the phone. Your subscription is cancelled (see above). Only the photo counters and the subscription state, which hold neither your name nor your email, are kept for the periods in the overview. To have your purchase history erased at RevenueCat, write to us.</li>
+      <li><strong>Account on our server, without the app</strong>: go to <a href="https://bobobidou-backend-763396034125.europe-west1.run.app/account/delete">the account deletion page</a> and sign in with the Google account you use in the app. Deletion is immediate, your subscription is cancelled, and Bobobidou's access to your Google account is revoked too.</li>
       <li>Your Google account itself is never deleted. You can remove Bobobidou's access at any time at <a href="https://myaccount.google.com/connections">myaccount.google.com/connections</a>.</li>
     </ul>
   </section>

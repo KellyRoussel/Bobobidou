@@ -77,18 +77,20 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Supprime le compte backend. Renvoie false en cas d'échec (session conservée).
-  Future<bool> deleteAccount() async {
+  /// Supprime le compte backend. `success` à false en cas d'échec (session conservée) ;
+  /// `subscriptionCancelFailed` si l'abonnement n'a pas pu être résilié.
+  Future<({bool success, bool subscriptionCancelFailed})> deleteAccount() async {
     _isLoading = true;
     notifyListeners();
 
-    bool success;
+    ({bool success, bool subscriptionCancelFailed}) result;
     try {
-      success = await _authService.deleteAccount();
+      result = await _authService.deleteAccount();
     } catch (e) {
       debugPrint('Delete account error: $e');
-      success = false;
+      result = (success: false, subscriptionCancelFailed: false);
     }
+    final success = result.success;
     if (success) {
       _isAuthenticated = false;
       _user = null;
@@ -100,6 +102,6 @@ class AuthProvider extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
-    return success;
+    return result;
   }
 }
