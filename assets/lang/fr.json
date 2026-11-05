@@ -137,5 +137,7 @@
   "premium_free_photos_left": "{left} photo(s) gratuite(s) sur {total}",
   "premium_discover": "Découvrir Premium",
   "delete_account_subscription_warning": "Votre abonnement Premium sera résilié : il ne sera plus renouvelé, et reste utilisable jusqu'à la fin de la période payée.",
-  "delete_account_subscription_failed": "Votre compte a été supprimé, mais votre abonnement n'a pas pu être résilié. Résiliez-le dans Google Play pour ne plus être prélevé."
+  "delete_account_subscription_failed": "Votre compte a été supprimé, mais votre abonnement n'a pas pu être résilié. Résiliez-le dans Google Play pour ne plus être prélevé.",
+  "premium_restore_failed": "La restauration n'a pas abouti. Vérifiez votre connexion et réessayez.",
+  "delete_account_subscription_unknown": "Si vous avez un abonnement Premium, il sera résilié : il ne sera plus renouvelé, et reste utilisable jusqu'à la fin de la période payée."
 }

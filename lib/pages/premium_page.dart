@@ -63,13 +63,16 @@ class _PremiumPageState extends State<PremiumPage> {
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     setState(() => _busy = true);
-    final premium = await context.read<SubscriptionProvider>().restore();
+    final outcome = await context.read<SubscriptionProvider>().restore();
     if (!mounted) return;
     setState(() => _busy = false);
-    messenger.showSnackBar(SnackBar(
-      content: Text(localizations.translate(premium ? 'premium_restored' : 'premium_nothing_to_restore')),
-    ));
-    if (premium) navigator.pop(true);
+    final message = switch (outcome) {
+      RestoreOutcome.restored => 'premium_restored',
+      RestoreOutcome.nothingToRestore => 'premium_nothing_to_restore',
+      RestoreOutcome.failed => 'premium_restore_failed',
+    };
+    messenger.showSnackBar(SnackBar(content: Text(localizations.translate(message))));
+    if (outcome == RestoreOutcome.restored) navigator.pop(true);
   }
 
   @override

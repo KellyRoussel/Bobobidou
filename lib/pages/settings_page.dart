@@ -236,8 +236,19 @@ class _AccountCard extends StatelessWidget {
     final localizations = AppLocalizations.of(context);
     final authProvider = context.read<AuthProvider>();
     final messenger = ScaffoldMessenger.of(context);
-    final status = context.read<SubscriptionProvider>().status;
-    final subscribed = status != null && status.premium && status.willRenew;
+    final subscriptionProvider = context.read<SubscriptionProvider>();
+    // Not loaded yet (or the backend was unreachable): ask now, so a
+    // subscriber is never left without the warning
+    final status = subscriptionProvider.status ?? await subscriptionProvider.load();
+    if (!context.mounted) return;
+    final String? subscriptionWarning;
+    if (status == null) {
+      subscriptionWarning = localizations.translate('delete_account_subscription_unknown');
+    } else if (status.premium && status.willRenew) {
+      subscriptionWarning = localizations.translate('delete_account_subscription_warning');
+    } else {
+      subscriptionWarning = null;
+    }
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -246,7 +257,7 @@ class _AccountCard extends StatelessWidget {
         content: Text([
           localizations.translate('delete_account_confirmation'),
           // The backend cancels the renewal: say it before
-          if (subscribed) localizations.translate('delete_account_subscription_warning'),
+          if (subscriptionWarning != null) subscriptionWarning,
         ].join('\n\n')),
         actions: [
           TextButton(

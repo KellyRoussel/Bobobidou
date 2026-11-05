@@ -49,6 +49,15 @@ class AuthProvider extends ChangeNotifier {
     return true;
   }
 
+  /// La session a été refusée par le backend (tokens déjà effacés par AuthService) :
+  /// toute l'app repasse en mode déconnecté.
+  void sessionExpired() {
+    if (!_isAuthenticated) return;
+    _isAuthenticated = false;
+    _user = null;
+    notifyListeners();
+  }
+
   Future<bool> login(BuildContext context) async {
 
     _isLoading = true;

@@ -137,5 +137,7 @@
   "premium_free_photos_left": "{left} of {total} free photos left",
   "premium_discover": "Discover Premium",
   "delete_account_subscription_warning": "Your Premium subscription will be cancelled: it won't renew, and stays usable until the end of the paid period.",
-  "delete_account_subscription_failed": "Your account has been deleted, but your subscription could not be cancelled. Cancel it in Google Play to stop the payments."
+  "delete_account_subscription_failed": "Your account has been deleted, but your subscription could not be cancelled. Cancel it in Google Play to stop the payments.",
+  "premium_restore_failed": "The restore did not go through. Check your connection and try again.",
+  "delete_account_subscription_unknown": "If you have a Premium subscription, it will be cancelled: it won't renew, and stays usable until the end of the paid period."
 }

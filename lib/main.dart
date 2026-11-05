@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         // Follows the sign-in: loads the subscription, or forgets it on logout
         ChangeNotifierProxyProvider<AuthProvider, SubscriptionProvider>(
           create: (_) => SubscriptionProvider(),
-          update: (_, auth, subscription) => subscription!..updateAuth(auth.isAuthenticated),
+          update: (_, auth, subscription) => subscription!..updateAuth(auth),
         ),
         ChangeNotifierProvider(create: (_) => MealsProvider()),
         ChangeNotifierProvider(create: (_) => PainProvider()),
