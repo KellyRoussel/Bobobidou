@@ -149,26 +149,34 @@ class AuthService {
 
   /// Supprime le compte côté backend (utilisateur et tokens du schéma bobobidou)
   /// puis efface la session locale. Le journal stocké sur le téléphone est conservé.
-  /// Renvoie false si la suppression a échoué.
-  Future<bool> deleteAccount() async {
+  /// Le backend résilie aussi l'abonnement ; `subscriptionCancelFailed` indique
+  /// qu'il n'a pas pu le faire (l'utilisateur doit résilier dans Google Play).
+  Future<({bool success, bool subscriptionCancelFailed})> deleteAccount() async {
+    const failed = (success: false, subscriptionCancelFailed: false);
     final token = await getValidToken();
-    if (token == null) return false;
+    if (token == null) return failed;
 
     var response = await _sendDeleteAccount(token);
     // Token rejeté : on le renouvelle une fois et on réessaie
     if (response.statusCode == 401) {
       final newToken = await getValidToken(forceRefresh: true);
-      if (newToken == null) return false;
+      if (newToken == null) return failed;
       response = await _sendDeleteAccount(newToken);
     }
 
     // 404 : le compte n'existe déjà plus côté backend
     if (response.statusCode == 200 || response.statusCode == 404) {
+      var cancelFailed = false;
+      try {
+        cancelFailed = response.statusCode == 200 && jsonDecode(response.body)['subscription'] == 'failed';
+      } catch (_) {
+        // Pas notre JSON : rien à signaler
+      }
       await logout();
-      return true;
+      return (success: true, subscriptionCancelFailed: cancelFailed);
     }
     debugPrint('Delete account failed (${response.statusCode}): ${response.body}');
-    return false;
+    return failed;
   }
 
   Future<http.Response> _sendDeleteAccount(String token) {

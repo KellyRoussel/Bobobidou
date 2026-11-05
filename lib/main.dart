@@ -12,6 +12,7 @@ import 'providers/locale_provider.dart';
 import 'providers/meals_provider.dart';
 import 'providers/pain_provider.dart';
 import 'providers/analysis_provider.dart';
+import 'providers/subscription_provider.dart';
 import 'pages/home_page/home_page.dart';
 
 Future<void> main() async {
@@ -41,6 +42,11 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        // Follows the sign-in: loads the subscription, or forgets it on logout
+        ChangeNotifierProxyProvider<AuthProvider, SubscriptionProvider>(
+          create: (_) => SubscriptionProvider(),
+          update: (_, auth, subscription) => subscription!..updateAuth(auth),
+        ),
         ChangeNotifierProvider(create: (_) => MealsProvider()),
         ChangeNotifierProvider(create: (_) => PainProvider()),
         ChangeNotifierProvider(create: (_) => AnalysisProvider()),

@@ -1,6 +1,8 @@
 import 'package:bobobidou/l10n/app_localizations.dart';
 import 'package:bobobidou/pages/camera_page.dart';
+import 'package:bobobidou/pages/premium_page.dart';
 import 'package:bobobidou/providers/auth_provider.dart';
+import 'package:bobobidou/providers/subscription_provider.dart';
 import 'package:bobobidou/theme/bobo_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -107,6 +109,21 @@ class _IngredientInputWidgetState extends State<IngredientInputWidget> {
         );
         return;
       }
+    }
+
+    // Plus de photo gratuite et pas d'abonnement : proposer Premium avant la photo.
+    // Sans réponse du backend, on ouvre la caméra : c'est lui qui décide.
+    final subscriptionProvider = context.read<SubscriptionProvider>();
+    setState(() {
+      _isOpeningCamera = true;
+    });
+    final status = await subscriptionProvider.load();
+    if (!mounted) return;
+    setState(() {
+      _isOpeningCamera = false;
+    });
+    if (status != null && status.needsSubscription) {
+      if (!await PremiumPage.open(context) || !mounted) return;
     }
 
     // Si l'utilisateur est authentifié, ouvrir la page de la caméra
